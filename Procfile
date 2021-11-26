@@ -1,0 +1,1 @@
+web: ./build/install/restaurant_backend/bin/restaurant_backend
