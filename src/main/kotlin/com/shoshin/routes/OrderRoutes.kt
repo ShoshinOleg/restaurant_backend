@@ -15,7 +15,8 @@ fun Application.registerOrderRoutes() {
 }
 
 fun Route.listOrdersRoute() {
-    get("order") {
+    get("/order") {
+        println("/order")
         if(orderStorage.isNotEmpty()) {
             call.respond(orderStorage)
         }

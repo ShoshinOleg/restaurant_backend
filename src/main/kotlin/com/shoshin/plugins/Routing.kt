@@ -1,5 +1,6 @@
 package com.shoshin.plugins
 
+import com.shoshin.routes.registerOrderRoutes
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.application.*
@@ -10,7 +11,10 @@ fun Application.configureRouting() {
 
     routing {
         get("/") {
+            println("/")
             call.respondText("Hello World!")
         }
     }
+    registerOrderRoutes()
+
 }
