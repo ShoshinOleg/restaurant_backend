@@ -35,8 +35,10 @@ fun Route.menuCategoriesRoute() {
     post("/categories") {
         println("POST: /categories")
         val category = call.receive<MenuCategory>()
+        println("POST: ::category=$category")
         if(category.id == null) {
             category.id = REF_CATEGORIES.push().key
+            println("POST: ::categoryID=${category.id}")
             category.id ?: return@post call.respond(
                 HttpStatusCode.InternalServerError,
                 ErrorResponse(
