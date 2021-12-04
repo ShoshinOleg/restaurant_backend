@@ -6,10 +6,13 @@ import io.ktor.application.*
 import io.ktor.response.*
 import io.ktor.request.*
 import io.ktor.routing.*
+import io.ktor.gson.*
 
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
-        json()
+        gson() {
+
+        }
     }
 
     routing {
