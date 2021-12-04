@@ -12,5 +12,6 @@ fun Application.module(testing: Boolean = false) {
     initFirebase()
     configureSecurity()
     configureSerialization()
+    configureMonitoring()
     configureRouting()
 }
