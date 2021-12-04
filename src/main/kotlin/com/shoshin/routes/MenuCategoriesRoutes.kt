@@ -32,8 +32,8 @@ fun Route.menuCategoriesRoute() {
 //
 //    }
 
-    post("/category") {
-        println("/category")
+    post("/categories") {
+        println("POST: /categories")
         val category = call.receive<MenuCategory>()
         if(category.id == null) {
             category.id = REF_CATEGORIES.push().key
@@ -62,8 +62,8 @@ fun Route.menuCategoriesRoute() {
         }
     }
 
-    get("/category") {
-        println("GET: /category")
+    get("/categories") {
+        println("GET: /categories")
         when(val result = getCategories()) {
             is Reaction.OnSuccess -> {
                 return@get call.respond(
@@ -83,6 +83,7 @@ fun Route.menuCategoriesRoute() {
     }
 
     get("/category/{id}") {
+        println("GET: /category/{id}")
         val id = call.parameters["id"] ?: return@get call.respond(
             status = HttpStatusCode.BadRequest,
             ApiResponse.failure(null)
