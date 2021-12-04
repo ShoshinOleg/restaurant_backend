@@ -1,5 +1,6 @@
 package com.shoshin.plugins
 
+import com.shoshin.routes.registerMenuCategoriesRoutes
 import com.shoshin.routes.registerOrderRoutes
 import io.ktor.routing.*
 import io.ktor.http.*
@@ -16,5 +17,5 @@ fun Application.configureRouting() {
         }
     }
     registerOrderRoutes()
-
+    registerMenuCategoriesRoutes()
 }

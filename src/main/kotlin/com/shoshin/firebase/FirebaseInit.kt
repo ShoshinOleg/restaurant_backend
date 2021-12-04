@@ -10,6 +10,7 @@ fun initFirebase() {
 
     val options = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+        .setDatabaseUrl("https://restaurant-48d90-default-rtdb.europe-west1.firebasedatabase.app")
         .build()
 
     FirebaseApp.initializeApp(options)
