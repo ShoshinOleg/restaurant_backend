@@ -84,7 +84,7 @@ fun Route.menuCategoriesRoute() {
         }
     }
 
-    get("/category/{id}") {
+    get("/categories/{id}") {
         println("GET: /category/{id}")
         val id = call.parameters["id"] ?: return@get call.respond(
             status = HttpStatusCode.BadRequest,
