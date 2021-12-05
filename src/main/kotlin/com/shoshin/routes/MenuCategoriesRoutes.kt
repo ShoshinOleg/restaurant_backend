@@ -27,11 +27,6 @@ fun Application.registerMenuCategoriesRoutes() {
 }
 
 fun Route.menuCategoriesRoute() {
-//    get("/category") {
-////        FirebaseApp.getInstance()
-//
-//    }
-
     post("/categories") {
         println("POST: /categories")
         val category = call.receive<MenuCategory>()
@@ -47,20 +42,23 @@ fun Route.menuCategoriesRoute() {
             )
         }
         println("category=$category")
-        if(addCategory(category)) {
-            println("category added")
-            return@post call.respond(
-                status = HttpStatusCode.Created,
-                category.id!!
-            )
-        } else {
-            println("category not added")
-            return@post call.respond(
-                status = HttpStatusCode.InternalServerError,
-                ErrorResponse(
-                    ApiError(message = "Category not added")
+        when(val result = addCategory(category)) {
+            is Reaction.OnSuccess -> {
+                return@post call.respond(
+                    status = HttpStatusCode.Created,
+                    result.data
                 )
-            )
+
+            }
+            is Reaction.OnError -> {
+                return@post call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    ErrorResponse(ApiError(
+                        message = "Category not added"
+                    ))
+                )
+            }
+
         }
     }
 
@@ -113,15 +111,19 @@ fun Route.menuCategoriesRoute() {
     }
 }
 
-suspend fun addCategory(category: MenuCategory): Boolean {
+suspend fun addCategory(category: MenuCategory): Reaction<MenuCategory> {
     return suspendCoroutine { cont ->
         REF_CATEGORIES.child("${category.id}")
             .setValue(category
             ) { error, ref ->
                 if(error != null ) {
-                    cont.resume(false)
+                    cont.resume(Reaction.OnError(
+                        error.toException()
+                    ))
                 } else {
-                    cont.resume(true)
+                    cont.resume(Reaction.OnSuccess(
+                        category
+                    ))
                 }
             }
     }
