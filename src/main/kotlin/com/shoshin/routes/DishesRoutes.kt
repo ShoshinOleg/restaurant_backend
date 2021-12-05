@@ -31,10 +31,13 @@ fun Route.dishesRoutes() {
             status = HttpStatusCode.BadRequest,
             ErrorResponse(ApiError(message = "BadRequest"))
         )
+        println("GET: /categories/{id}/dishes - :: categoryId=$categoryId")
         when(val dishesIdsResult = getDishesIdsForCategory(categoryId)) {
             is Reaction.OnSuccess -> {
                 when(val dishesResult = getDishes(dishesIdsResult.data)) {
                     is Reaction.OnSuccess -> {
+                        println("GET: /categories/{id}/dishes - ::dishesIdsResult = $dishesIdsResult ")
+
                         return@get call.respond(
                             status = HttpStatusCode.OK,
                             dishesResult.data

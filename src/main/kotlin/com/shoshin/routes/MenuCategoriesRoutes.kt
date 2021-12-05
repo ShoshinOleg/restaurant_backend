@@ -88,13 +88,17 @@ fun Route.menuCategoriesRoute() {
         println("GET: /category/{id}")
         val id = call.parameters["id"] ?: return@get call.respond(
             status = HttpStatusCode.BadRequest,
-            ApiResponse.failure(null)
+            ErrorResponse(
+                ApiError(message = "BadRequest")
+            )
         )
+        println("id = $id")
         when(val result = getCategoryById(id)) {
             is Reaction.OnSuccess -> {
+                println("result= $result")
                 return@get call.respond(
                     status = HttpStatusCode.OK,
-                    ApiResponse.success(result.data)
+                    result.data
                 )
             }
             is Reaction.OnError -> {
@@ -130,6 +134,7 @@ suspend fun getCategories() : Reaction<List<MenuCategory>> {
                 override fun onDataChange(snapshot: DataSnapshot?) {
                     val categories = mutableListOf<MenuCategory>()
                     if(snapshot != null) {
+                        println("snapshot = $snapshot")
                         for(child in snapshot.children) {
                             categories.add(child.getValue(MenuCategory::class.java))
                         }
@@ -153,7 +158,9 @@ suspend fun getCategoryById(id: String): Reaction<MenuCategory> {
             .addListenerForSingleValueEvent(object: ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot?) {
                     if(snapshot != null) {
+                        println("snapshot=$snapshot")
                         val category = snapshot.getValue(MenuCategory::class.java)
+                        println("category=$category")
                         continuation.resume(Reaction.OnSuccess(category))
                     } else {
                         continuation.resume(Reaction.OnError(Throwable("Not found")))
