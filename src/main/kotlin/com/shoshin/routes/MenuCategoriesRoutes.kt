@@ -3,7 +3,6 @@ package com.shoshin.routes
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.shoshin.common.ApiError
-import com.shoshin.common.ApiResponse
 import com.shoshin.common.ErrorResponse
 import com.shoshin.common.Reaction
 import com.shoshin.models.MenuCategory
@@ -22,11 +21,14 @@ val REF_CATEGORIES: DatabaseReference = FirebaseDatabase.getInstance(FirebaseApp
 
 fun Application.registerMenuCategoriesRoutes() {
     routing {
-        menuCategoriesRoute()
+        updateCategory()
+        getCategories()
+        getCategoryById()
+        removeCategory()
     }
 }
 
-fun Route.menuCategoriesRoute() {
+fun Route.updateCategory() {
     post("/categories") {
         println("POST: /categories")
         val category = call.receive<MenuCategory>()
@@ -58,13 +60,14 @@ fun Route.menuCategoriesRoute() {
                     ))
                 )
             }
-
         }
     }
+}
 
+fun Route.getCategories() {
     get("/categories") {
         println("GET: /categories")
-        when(val result = getCategories()) {
+        when(val result = com.shoshin.routes.getCategories()) {
             is Reaction.OnSuccess -> {
                 return@get call.respond(
                     status = HttpStatusCode.OK,
@@ -81,7 +84,10 @@ fun Route.menuCategoriesRoute() {
             }
         }
     }
+}
 
+
+fun Route.getCategoryById() {
     get("/categories/{id}") {
         println("GET: /category/{id}")
         val id = call.parameters["id"] ?: return@get call.respond(
@@ -104,6 +110,48 @@ fun Route.menuCategoriesRoute() {
                     status = HttpStatusCode.InternalServerError,
                     ErrorResponse(
                         ApiError(message = "InternalError")
+                    )
+                )
+            }
+        }
+    }
+}
+
+fun Route.removeCategory(){
+    delete("/categories/{id}") {
+        println("REMOVE: /category/{id}")
+        val id = call.parameters["id"] ?: return@delete call.respond(
+            status = HttpStatusCode.BadRequest,
+            ErrorResponse(
+                ApiError(message = "BadRequest")
+            )
+        )
+        println("id = $id")
+        when(val result = getCategoryById(id)) {
+            is Reaction.OnSuccess -> {
+                println("result= $result")
+                when(val removeResult = removeCategory(id)) {
+                    is Reaction.OnSuccess -> {
+                        return@delete call.respondText(
+                            status = HttpStatusCode.OK,
+                            text = "Категория удалена"
+                        )
+                    }
+                    is Reaction.OnError -> {
+                        return@delete call.respond(
+                            ErrorResponse(
+                                ApiError(message = removeResult.exception.message)
+                            )
+                        )
+                    }
+                }
+
+            }
+            is Reaction.OnError -> {
+                return@delete call.respond(
+                    status = HttpStatusCode.NotFound,
+                    ErrorResponse(
+                        ApiError(message = "Not Found")
                     )
                 )
             }
@@ -176,6 +224,24 @@ suspend fun getCategoryById(id: String): Reaction<MenuCategory> {
                     )
                 }
             })
+    }
+}
+
+suspend fun removeCategory(categoryId: String): Reaction<Boolean> {
+    return suspendCoroutine { continuation ->
+        REF_CATEGORIES
+            .child(categoryId)
+            .removeValue { error, ref ->
+                if(error != null) {
+                    continuation.resume(
+                        Reaction.OnError(error.toException())
+                    )
+                } else {
+                    continuation.resume(
+                        Reaction.OnSuccess(true)
+                    )
+                }
+            }
     }
 }
 
