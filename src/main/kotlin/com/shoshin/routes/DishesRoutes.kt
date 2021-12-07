@@ -150,7 +150,7 @@ fun Route.updateDishRoute() {
             is Reaction.OnSuccess -> {
                 return@post call.respond(
                     status = HttpStatusCode.OK,
-                    message = result
+                    message = result.data
                 )
             }
             is Reaction.OnError -> {
