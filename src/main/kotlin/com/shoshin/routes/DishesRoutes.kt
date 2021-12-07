@@ -3,11 +3,9 @@ package com.shoshin.routes
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.shoshin.common.ApiError
-import com.shoshin.common.ApiResponse
 import com.shoshin.common.ErrorResponse
 import com.shoshin.common.Reaction
-import com.shoshin.domain_abstract.entities.dish.Dish
-import com.shoshin.models.MenuCategory
+import com.shoshin.models.dish.Dish
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*

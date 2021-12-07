@@ -1,10 +1,11 @@
-package com.shoshin.domain_abstract.entities.dish
+package com.shoshin.models.dish
 
-import java.io.Serializable
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class DishOptionVariant(
     var id: String? = null,
     var name: String? = null,
     var price: Int? = null,
     var isChecked: Boolean = false
-): Serializable
+)

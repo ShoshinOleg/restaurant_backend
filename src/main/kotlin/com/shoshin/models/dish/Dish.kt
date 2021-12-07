@@ -1,7 +1,6 @@
-package com.shoshin.domain_abstract.entities.dish
+package com.shoshin.models.dish
 
-import java.io.Serializable
-
+@kotlinx.serialization.Serializable
 data class Dish (
     var id: String? = null,
     var categoryId: String? = null,
@@ -12,7 +11,7 @@ data class Dish (
     var count: Int? = 1,
     var comment: String? = null,
     var options: HashMap<String, DishOption>? = hashMapOf()
-): Serializable {
+) {
 
     fun getTotalPrice(): Int {
         if(count != null && price != null) {
