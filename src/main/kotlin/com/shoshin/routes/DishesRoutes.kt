@@ -72,7 +72,7 @@ suspend fun getDishesIdsForCategory(categoryId: String): Reaction<List<String>> 
     return suspendCoroutine { continuation ->
         REF_CATEGORIES
             .child(categoryId)
-            .child("itemsIds")
+            .child("dishesIds")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot?) {
                     if(snapshot != null) {
