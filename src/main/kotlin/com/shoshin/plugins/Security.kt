@@ -13,7 +13,7 @@ fun Application.configureSecurity() {
     authentication {
         firebase("firebase", FirebaseApp.getInstance()) {
             validate { credential ->
-                FirebasePrincipal(userId = credential.token.uid)
+                FirebasePrincipal(userId = credential.token.uid, credential.token)
             }
         }
     }

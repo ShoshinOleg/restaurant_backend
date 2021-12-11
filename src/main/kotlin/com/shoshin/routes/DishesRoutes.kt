@@ -7,6 +7,7 @@ import com.shoshin.common.ErrorResponse
 import com.shoshin.common.Reaction
 import com.shoshin.models.dish.Dish
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -21,12 +22,15 @@ val REF_DISHES: DatabaseReference = FirebaseDatabase.getInstance(FirebaseApp.get
 fun Application.registerDishesRoutes() {
     routing {
         dishesRoutes()
+
         updateDishRoute()
     }
 }
 
 fun Route.dishesRoutes() {
     get("/categories/{id}/dishes") {
+//        FirebaseApp.getInstance()
+//        call.principal<>()
         println("GET: /categories/{id}/dishes")
         val categoryId = call.parameters["id"] ?: return@get call.respond(
             status = HttpStatusCode.BadRequest,
@@ -130,6 +134,7 @@ suspend fun getDishes(dishIds: List<String>): Reaction<List<Dish>> {
 
 fun Route.updateDishRoute() {
     post("/categories/{id}/dishes") {
+
         println("POST: /categories/{id}/dishes")
         val categoryId = call.parameters["id"] ?: return@post call.respond(
             status = HttpStatusCode.BadRequest,

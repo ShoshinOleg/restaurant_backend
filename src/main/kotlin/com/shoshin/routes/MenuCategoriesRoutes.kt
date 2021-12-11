@@ -5,8 +5,10 @@ import com.google.firebase.database.*
 import com.shoshin.common.ApiError
 import com.shoshin.common.ErrorResponse
 import com.shoshin.common.Reaction
+import com.shoshin.firebase.FirebasePrincipal
 import com.shoshin.models.MenuCategory
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -21,7 +23,9 @@ val REF_CATEGORIES: DatabaseReference = FirebaseDatabase.getInstance(FirebaseApp
 
 fun Application.registerMenuCategoriesRoutes() {
     routing {
-        updateCategory()
+        authenticate("firebase") {
+            updateCategory()
+        }
         getCategories()
         getCategoryById()
         removeCategory()
@@ -31,6 +35,9 @@ fun Application.registerMenuCategoriesRoutes() {
 fun Route.updateCategory() {
     post("/categories") {
         println("POST: /categories")
+        val principal = call.principal<FirebasePrincipal>()
+        println("principal!=null = ${principal!=null}")
+        println("principal.id=${principal?.userId}")
         val category = call.receive<MenuCategory>()
         println("POST: ::category=$category")
         if(category.id == null) {
