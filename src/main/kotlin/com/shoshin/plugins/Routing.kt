@@ -3,6 +3,7 @@ package com.shoshin.plugins
 import com.shoshin.routes.registerDishesRoutes
 import com.shoshin.routes.registerMenuCategoriesRoutes
 import com.shoshin.routes.registerOrderRoutes
+import com.shoshin.routes.registerUserRoutes
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.application.*
@@ -20,4 +21,5 @@ fun Application.configureRouting() {
     registerOrderRoutes()
     registerMenuCategoriesRoutes()
     registerDishesRoutes()
+    registerUserRoutes()
 }
