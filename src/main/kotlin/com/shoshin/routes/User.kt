@@ -109,11 +109,9 @@ suspend fun checkRole(principal: FirebasePrincipal, role: String): Reaction<Bool
             .child(principal.userId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot?) {
-                    println("abc")
-                    val userId = snapshot?.getValue(String::class.java)
-                    println("abc1")
+                    val isAdmin = snapshot?.getValue(Boolean::class.java)
                     cont.resume(
-                        Reaction.Success(userId != null)
+                        Reaction.Success(isAdmin!!)
                     )
                 }
 
