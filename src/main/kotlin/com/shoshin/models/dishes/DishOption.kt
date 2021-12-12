@@ -1,4 +1,4 @@
-package com.shoshin.models.dish
+package com.shoshin.models.dishes
 
 @kotlinx.serialization.Serializable
 data class DishOption (

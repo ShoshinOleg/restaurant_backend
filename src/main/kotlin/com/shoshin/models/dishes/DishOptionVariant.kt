@@ -1,4 +1,4 @@
-package com.shoshin.models.dish
+package com.shoshin.models.dishes
 
 import kotlinx.serialization.Serializable
 

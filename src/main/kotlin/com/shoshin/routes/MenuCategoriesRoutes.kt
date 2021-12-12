@@ -52,14 +52,14 @@ fun Route.updateCategory() {
         }
         println("category=$category")
         when(val result = addCategory(category)) {
-            is Reaction.OnSuccess -> {
+            is Reaction.Success -> {
                 return@post call.respond(
                     status = HttpStatusCode.Created,
                     result.data
                 )
 
             }
-            is Reaction.OnError -> {
+            is Reaction.Error -> {
                 return@post call.respond(
                     status = HttpStatusCode.InternalServerError,
                     ErrorResponse(ApiError(
@@ -75,13 +75,13 @@ fun Route.getCategories() {
     get("/categories") {
         println("GET: /categories")
         when(val result = com.shoshin.routes.getCategories()) {
-            is Reaction.OnSuccess -> {
+            is Reaction.Success -> {
                 return@get call.respond(
                     status = HttpStatusCode.OK,
                     result.data
                 )
             }
-            is Reaction.OnError -> {
+            is Reaction.Error -> {
                 return@get call.respond(
                     status = HttpStatusCode.NotFound,
                     ErrorResponse(
@@ -105,14 +105,14 @@ fun Route.getCategoryById() {
         )
         println("id = $id")
         when(val result = getCategoryById(id)) {
-            is Reaction.OnSuccess -> {
+            is Reaction.Success -> {
                 println("result= $result")
                 return@get call.respond(
                     status = HttpStatusCode.OK,
                     result.data
                 )
             }
-            is Reaction.OnError -> {
+            is Reaction.Error -> {
                 return@get call.respond(
                     status = HttpStatusCode.InternalServerError,
                     ErrorResponse(
@@ -135,16 +135,16 @@ fun Route.removeCategory(){
         )
         println("id = $id")
         when(val result = getCategoryById(id)) {
-            is Reaction.OnSuccess -> {
+            is Reaction.Success -> {
                 println("result= $result")
                 when(val removeResult = removeCategory(id)) {
-                    is Reaction.OnSuccess -> {
+                    is Reaction.Success -> {
                         return@delete call.respondText(
                             status = HttpStatusCode.OK,
                             text = "Категория удалена"
                         )
                     }
-                    is Reaction.OnError -> {
+                    is Reaction.Error -> {
                         return@delete call.respond(
                             ErrorResponse(
                                 ApiError(message = removeResult.exception.message)
@@ -154,7 +154,7 @@ fun Route.removeCategory(){
                 }
 
             }
-            is Reaction.OnError -> {
+            is Reaction.Error -> {
                 return@delete call.respond(
                     status = HttpStatusCode.NotFound,
                     ErrorResponse(
@@ -172,11 +172,11 @@ suspend fun addCategory(category: MenuCategory): Reaction<MenuCategory> {
             .setValue(category
             ) { error, ref ->
                 if(error != null ) {
-                    cont.resume(Reaction.OnError(
+                    cont.resume(Reaction.Error(
                         error.toException()
                     ))
                 } else {
-                    cont.resume(Reaction.OnSuccess(
+                    cont.resume(Reaction.Success(
                         category
                     ))
                 }
@@ -196,13 +196,13 @@ suspend fun getCategories() : Reaction<List<MenuCategory>> {
                             categories.add(child.getValue(MenuCategory::class.java))
                         }
                     }
-                    cont.resume(Reaction.OnSuccess(categories))
+                    cont.resume(Reaction.Success(categories))
                 }
 
                 override fun onCancelled(error: DatabaseError?) {
                     println("getCategoriesError = ${error?.message}")
 
-                    cont.resume(Reaction.OnError(Throwable(error?.message, error?.toException()?.cause)))
+                    cont.resume(Reaction.Error(Throwable(error?.message, error?.toException()?.cause)))
                 }
             })
     }
@@ -218,16 +218,16 @@ suspend fun getCategoryById(id: String): Reaction<MenuCategory> {
                         println("snapshot=$snapshot")
                         val category = snapshot.getValue(MenuCategory::class.java)
                         println("category=$category")
-                        continuation.resume(Reaction.OnSuccess(category))
+                        continuation.resume(Reaction.Success(category))
                     } else {
-                        continuation.resume(Reaction.OnError(Throwable("Not found")))
+                        continuation.resume(Reaction.Error(Throwable("Not found")))
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError?) {
                     println("getCategoryError = ${error?.message}")
                     continuation.resume(
-                        Reaction.OnError(Throwable(error?.message, error?.toException()?.cause))
+                        Reaction.Error(Throwable(error?.message, error?.toException()?.cause))
                     )
                 }
             })
@@ -241,11 +241,11 @@ suspend fun removeCategory(categoryId: String): Reaction<Boolean> {
             .removeValue { error, ref ->
                 if(error != null) {
                     continuation.resume(
-                        Reaction.OnError(error.toException())
+                        Reaction.Error(error.toException())
                     )
                 } else {
                     continuation.resume(
-                        Reaction.OnSuccess(true)
+                        Reaction.Success(true)
                     )
                 }
             }
