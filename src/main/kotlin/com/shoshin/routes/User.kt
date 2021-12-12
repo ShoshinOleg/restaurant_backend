@@ -58,7 +58,7 @@ fun Route.hasRoleRoute() {
 }
 
 fun Route.registerSignInUserRoute() {
-    post("/users") {
+    post("/users/register") {
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.respond(
             status = HttpStatusCode.InternalServerError,
             ErrorResponse(ApiError(message = "InternalServerError"))
