@@ -116,7 +116,6 @@ suspend fun checkRole(principal: FirebasePrincipal, role: String): Reaction<Bool
                 }
 
                 override fun onCancelled(error: DatabaseError?) {
-                    println("abcCancel")
                     cont.resume(
                         Reaction.Success(false)
                     )
