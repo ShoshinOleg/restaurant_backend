@@ -18,6 +18,7 @@ import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -198,9 +199,11 @@ fun Route.updateCategoryImageRoute() {
                                 val blob = firebaseStorage?.create(
                                     "images/menu/categories/$categoryId",
                                     fileBytes,
-                                    "image/jpeg"
+                                    "image/jpeg",
+
                                 )
-                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
+//                                blob?.metadata["firebaseStorageDownloadTokens"] = UUID.randomUUID()
+//                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
 //                                blob?.createAcl()
 
 //                                blob?.acl?.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
@@ -209,6 +212,8 @@ fun Route.updateCategoryImageRoute() {
 //                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
                                 blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
                                 blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
+                                blob?.metadata!!["firebaseStorageDownloadTokens"] = UUID.randomUUID().toString()
+
 //                                blob?.mediaLink
 //                                blob?
 //                                blob.signUrl()
@@ -220,6 +225,7 @@ fun Route.updateCategoryImageRoute() {
                                 println("blob?.selfLink=${blob?.selfLink}")
                                 println("blob?.mediaLink=${blob?.mediaLink}")
                                 println("blob?.metadata=${blob?.metadata}")
+
 
 
 //                                firebaseStorage?.storage?.
