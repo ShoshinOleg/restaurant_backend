@@ -20,6 +20,7 @@ import io.ktor.routing.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.time.Duration
 
 
 val REF_CATEGORIES: DatabaseReference = FirebaseDatabase.getInstance(FirebaseApp.getInstance()).reference
@@ -204,6 +205,10 @@ fun Route.updateCategoryImageRoute() {
                                 println("blob?.contentDisposition=${blob?.contentDisposition}")
                                 println("blob?.blobId?.toGsUtilUri()=${blob?.blobId?.toGsUtilUri()}")
                                 println("blob.bucket = ${blob?.bucket}")
+                                println("blob?.name=${blob?.name}")
+                                println("blob?.selfLink=${blob?.selfLink}")
+//                                blob?.
+//                                blob?.signUrl(Duration.INFINITE.toLong(), TimeUnit.DAYS)
                                 val abc = blob?.signUrl(1, TimeUnit.MINUTES)
                                 println("abc=${abc}")
                             }
