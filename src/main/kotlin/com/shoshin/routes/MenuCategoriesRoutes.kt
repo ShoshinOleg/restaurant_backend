@@ -197,7 +197,10 @@ fun Route.updateCategoryImageRoute() {
                                     fileBytes,
                                     "image/jpeg"
                                 )
+//                                blob?
+                                println("blob?.blobId?.toGsUtilUri()=${blob?.blobId?.toGsUtilUri()}")
                                 println("blob.bucket = ${blob?.bucket}")
+//                                blob?.signUrl()
                             }
                         }
                     }
