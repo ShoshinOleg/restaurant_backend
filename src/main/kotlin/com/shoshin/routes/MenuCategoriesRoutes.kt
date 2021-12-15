@@ -205,10 +205,9 @@ fun Route.updateCategoryImageRoute() {
                                         Storage.PredefinedAcl.PUBLIC_READ
                                     )
                                 )
-
-                                val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/${blob?.name}?alt=media"
-                                val encodedUrl = java.net.URLEncoder.encode(targetUrl, "utf-8")
-                                println("encodedUrl=$encodedUrl")
+                                val encodedBlobName = java.net.URLEncoder.encode(blob?.name, "utf-8")
+                                val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/$encodedBlobName?alt=media"
+                                println("tu=$targetUrl")
                             }
                         }
                     }
