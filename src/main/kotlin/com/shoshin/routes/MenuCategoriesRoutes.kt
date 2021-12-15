@@ -198,6 +198,10 @@ fun Route.updateCategoryImageRoute() {
                             }
                         }
                     }
+                    return@post call.respond(
+                        HttpStatusCode.OK,
+                        "Изображение загружено"
+                    )
                 } else {
                     return@post call.respond(
                         status = HttpStatusCode.Forbidden,
