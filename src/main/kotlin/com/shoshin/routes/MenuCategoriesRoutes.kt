@@ -193,11 +193,9 @@ fun Route.updateCategoryImageRoute() {
             is Reaction.Success -> {
                 if(checkRoleRes.data) {
                     val multipartData = call.receiveMultipart()
-                    var fileName = ""
                     multipartData.forEachPart { part ->
                         when (part) {
                             is PartData.FileItem -> {
-                                fileName = part.originalFileName as String
                                 val fileBytes = part.streamProvider().readBytes()
                                 val blob = firebaseStorage?.create(
                                     "images/menu/categories/$categoryId",
@@ -207,8 +205,6 @@ fun Route.updateCategoryImageRoute() {
                                         Storage.PredefinedAcl.PUBLIC_READ
                                     )
                                 )
-
-//                                val aaa = java.net.URLEncoder.encode(blob?.name, "utf-8")
 
                                 val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/${blob?.name}?alt=media"
                                 val encodedUrl = java.net.URLEncoder.encode(targetUrl, "utf-8")
