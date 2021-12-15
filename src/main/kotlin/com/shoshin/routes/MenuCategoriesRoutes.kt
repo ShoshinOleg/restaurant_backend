@@ -192,11 +192,12 @@ fun Route.updateCategoryImageRoute() {
                             is PartData.FileItem -> {
                                 fileName = part.originalFileName as String
                                 val fileBytes = part.streamProvider().readBytes()
-                                firebaseStorage?.create(
+                                val blob = firebaseStorage?.create(
                                     "images/menu/categories/$categoryId",
                                     fileBytes,
                                     "image/jpeg"
                                 )
+                                println("blob.bucket = ${blob?.bucket}")
                             }
                         }
                     }
