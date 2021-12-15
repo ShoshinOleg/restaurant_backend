@@ -19,6 +19,8 @@ import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.apache.http.client.utils.URLEncodedUtils
+import java.net.URI
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -211,6 +213,11 @@ fun Route.updateCategoryImageRoute() {
                                         Storage.PredefinedAcl.PUBLIC_READ
                                     )
                                 )
+//                                URLEncodedUtils.
+
+                                val aaa = URI.create(blob?.name!!)
+                                val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/$aaa??alt=media"
+                                println("tu=$targetUrl")
 //                                blob?.metadata["firebaseStorageDownloadTokens"] = UUID.randomUUID()
 //                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
 //                                blob?.createAcl()
