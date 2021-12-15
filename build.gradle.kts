@@ -30,15 +30,10 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("com.google.firebase:firebase-admin:8.1.0")
-//    implementation("com.google.firebase:firebase-common-ktx:20.0.0")
-
     implementation("com.google.gms:google-services:4.3.10")
 
-    implementation(platform("com.google.firebase:firebase-bom:29.0.0"))
-    implementation("com.google.firebase:firebase-common-ktx:20.0.0")
-    implementation("com.google.firebase:firebase-database-ktx:20.0.2")
-
-
+//    implementation(platform("com.google.cloud:libraries-bom:24.1.0"))
+//    implementation("com.google.cloud:google-cloud-storage")
 }
 
 tasks.create("stage") {
