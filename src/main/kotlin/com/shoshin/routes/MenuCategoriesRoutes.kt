@@ -200,11 +200,16 @@ fun Route.updateCategoryImageRoute() {
                                     fileBytes,
                                     "image/jpeg"
                                 )
+                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
+//                                blob?.createAcl()
+
 //                                blob?.acl?.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
 //                                val aclList = blob?.acl as MutableList<Acl>
 //                                aclList.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
 //                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
+                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
                                 blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
+//                                blob?.mediaLink
 //                                blob?
 //                                blob.signUrl()
 //                                firebaseStorage?.storage?.signUrl()
@@ -213,6 +218,12 @@ fun Route.updateCategoryImageRoute() {
                                 println("blob.bucket = ${blob?.bucket}")
                                 println("blob?.name=${blob?.name}")
                                 println("blob?.selfLink=${blob?.selfLink}")
+                                println("blob?.mediaLink=${blob?.mediaLink}")
+                                println("blob?.metadata=${blob?.metadata}")
+
+
+//                                firebaseStorage?.storage?.
+
 //                                blob?.
 //                                blob?.
 //                                blob?.signUrl(Duration.INFINITE.toLong(), TimeUnit.DAYS)
