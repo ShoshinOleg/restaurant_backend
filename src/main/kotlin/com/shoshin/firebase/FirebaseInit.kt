@@ -21,6 +21,7 @@ fun initFirebase() {
     FirebaseApp.initializeApp(options)
 
     firebaseStorage = StorageClient.getInstance(FirebaseApp.getInstance()).bucket("restaurant-48d90.appspot.com")
+
 //    firebaseStorage = StorageClient.getInstance().bucket()
 }
 
