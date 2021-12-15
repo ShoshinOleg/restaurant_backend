@@ -203,56 +203,14 @@ fun Route.updateCategoryImageRoute() {
                                     "images/menu/categories/$categoryId",
                                     fileBytes,
                                     "image/jpeg",
-
-                                )
-                                firebaseStorage?.create(
-                                    "images/menu/categories/$categoryId",
-                                    fileBytes,
-                                    "image/jpeg",
                                     Bucket.BlobTargetOption.predefinedAcl(
                                         Storage.PredefinedAcl.PUBLIC_READ
                                     )
                                 )
-//                                URLEncodedUtils.
 
-//                                val aaa = URI.create(blob?.name!!)
                                 val aaa = java.net.URLEncoder.encode(blob?.name, "utf-8")
                                 val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/$aaa?alt=media"
                                 println("tu=$targetUrl")
-//                                blob?.metadata["firebaseStorageDownloadTokens"] = UUID.randomUUID()
-//                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-//                                blob?.createAcl()
-
-//                                blob?.acl?.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-//                                val aclList = blob?.acl as MutableList<Acl>
-//                                aclList.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-//                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-//                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-//                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-//                                blob?.metadata!!["firebaseStorageDownloadTokens"] = UUID.randomUUID().toString()
-
-
-//                                blob?.mediaLink
-//                                blob?
-//                                blob.signUrl()
-//                                firebaseStorage?.storage?.signUrl()
-                                println("blob?.contentDisposition=${blob?.contentDisposition}")
-                                println("blob?.blobId?.toGsUtilUri()=${blob?.blobId?.toGsUtilUri()}")
-                                println("blob.bucket = ${blob?.bucket}")
-                                println("blob?.name=${blob?.name}")
-                                println("blob?.selfLink=${blob?.selfLink}")
-                                println("blob?.mediaLink=${blob?.mediaLink}")
-                                println("blob?.metadata=${blob?.metadata}")
-
-
-
-//                                firebaseStorage?.storage?.
-
-//                                blob?.
-//                                blob?.
-//                                blob?.signUrl(Duration.INFINITE.toLong(), TimeUnit.DAYS)
-                                val abc = blob?.signUrl(1, TimeUnit.MINUTES)
-                                println("abc=${abc}")
                             }
                         }
                     }
