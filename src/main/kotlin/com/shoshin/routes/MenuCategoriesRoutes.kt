@@ -1,6 +1,7 @@
 package com.shoshin.routes
 
 
+import com.google.cloud.storage.Acl
 import com.google.cloud.storage.Bucket
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
@@ -199,6 +200,7 @@ fun Route.updateCategoryImageRoute() {
                                     fileBytes,
                                     "image/jpeg"
                                 )
+                                blob?.acl?.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
 //                                blob?
 //                                blob.signUrl()
 //                                firebaseStorage?.storage?.signUrl()
@@ -207,6 +209,7 @@ fun Route.updateCategoryImageRoute() {
                                 println("blob.bucket = ${blob?.bucket}")
                                 println("blob?.name=${blob?.name}")
                                 println("blob?.selfLink=${blob?.selfLink}")
+//                                blob?.
 //                                blob?.
 //                                blob?.signUrl(Duration.INFINITE.toLong(), TimeUnit.DAYS)
                                 val abc = blob?.signUrl(1, TimeUnit.MINUTES)
