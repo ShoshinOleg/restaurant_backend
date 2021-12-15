@@ -17,6 +17,7 @@ import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -198,11 +199,13 @@ fun Route.updateCategoryImageRoute() {
                                     "image/jpeg"
                                 )
 //                                blob?
-
+//                                blob.signUrl()
+//                                firebaseStorage?.storage?.signUrl()
                                 println("blob?.contentDisposition=${blob?.contentDisposition}")
                                 println("blob?.blobId?.toGsUtilUri()=${blob?.blobId?.toGsUtilUri()}")
                                 println("blob.bucket = ${blob?.bucket}")
-//                                blob?.signUrl()
+                                val abc = blob?.signUrl(1, TimeUnit.MINUTES)
+                                println("abc=${abc}")
                             }
                         }
                     }
