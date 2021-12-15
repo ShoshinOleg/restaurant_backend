@@ -3,6 +3,7 @@ package com.shoshin.routes
 
 import com.google.cloud.storage.Acl
 import com.google.cloud.storage.Bucket
+import com.google.cloud.storage.Storage
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.shoshin.common.ApiError
@@ -202,6 +203,14 @@ fun Route.updateCategoryImageRoute() {
                                     "image/jpeg",
 
                                 )
+                                firebaseStorage?.create(
+                                    "images/menu/categories/$categoryId",
+                                    fileBytes,
+                                    "image/jpeg",
+                                    Bucket.BlobTargetOption.predefinedAcl(
+                                        Storage.PredefinedAcl.PUBLIC_READ
+                                    )
+                                )
 //                                blob?.metadata["firebaseStorageDownloadTokens"] = UUID.randomUUID()
 //                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
 //                                blob?.createAcl()
@@ -210,9 +219,10 @@ fun Route.updateCategoryImageRoute() {
 //                                val aclList = blob?.acl as MutableList<Acl>
 //                                aclList.add(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
 //                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
-                                blob?.metadata!!["firebaseStorageDownloadTokens"] = UUID.randomUUID().toString()
+//                                blob?.createAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
+//                                blob?.updateAcl(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))
+//                                blob?.metadata!!["firebaseStorageDownloadTokens"] = UUID.randomUUID().toString()
+
 
 //                                blob?.mediaLink
 //                                blob?
