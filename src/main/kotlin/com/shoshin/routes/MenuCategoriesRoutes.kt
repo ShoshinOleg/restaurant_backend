@@ -1,6 +1,7 @@
 package com.shoshin.routes
 
 
+import com.google.cloud.storage.Bucket
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.shoshin.common.ApiError
@@ -193,7 +194,8 @@ fun Route.updateCategoryImageRoute() {
                                 val fileBytes = part.streamProvider().readBytes()
                                 firebaseStorage?.create(
                                     "images/menu/categories/$categoryId",
-                                    fileBytes
+                                    fileBytes,
+                                    "image/jpeg"
                                 )
                             }
                         }
