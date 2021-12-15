@@ -20,7 +20,8 @@ fun initFirebase() {
         .build()
     FirebaseApp.initializeApp(options)
 
-    firebaseStorage = StorageClient.getInstance().bucket()
+    firebaseStorage = StorageClient.getInstance(FirebaseApp.getInstance()).bucket()
+//    firebaseStorage = StorageClient.getInstance().bucket()
 }
 
 private fun getEnvServiceAccount() = System.getenv("ADMIN_KEY")?.let { ByteArrayInputStream(it.toByteArray()) }
