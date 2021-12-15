@@ -208,9 +208,11 @@ fun Route.updateCategoryImageRoute() {
                                     )
                                 )
 
-                                val aaa = java.net.URLEncoder.encode(blob?.name, "utf-8")
-                                val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/$aaa?alt=media"
-                                println("tu=$targetUrl")
+//                                val aaa = java.net.URLEncoder.encode(blob?.name, "utf-8")
+
+                                val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/${blob?.name}?alt=media"
+                                val encodedUrl = java.net.URLEncoder.encode(targetUrl, "utf-8")
+                                println("encodedUrl=$encodedUrl")
                             }
                         }
                     }
