@@ -249,7 +249,7 @@ suspend fun setCategoryImage(categoryId: String, imageUrl: String) : Reaction<Bo
     return suspendCoroutine { continuation ->
         REF_CATEGORIES
             .child(categoryId)
-            .child("imageUrl")
+            .child("imageURL")
             .setValue(imageUrl) { error, _ ->
                 if(error != null) {
                     continuation.resume(
