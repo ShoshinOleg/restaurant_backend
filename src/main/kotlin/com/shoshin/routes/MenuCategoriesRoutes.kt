@@ -192,6 +192,7 @@ fun Route.updateCategoryImageRoute() {
         when(val checkRoleRes = checkRole(principal, "admin")) {
             is Reaction.Success -> {
                 if(checkRoleRes.data) {
+                    var targetUrl = ""
                     val multipartData = call.receiveMultipart()
                     multipartData.forEachPart { part ->
                         when (part) {
@@ -206,15 +207,26 @@ fun Route.updateCategoryImageRoute() {
                                     )
                                 )
                                 val encodedBlobName = java.net.URLEncoder.encode(blob?.name, "utf-8")
-                                val targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/$encodedBlobName?alt=media"
+                                targetUrl = "https://firebasestorage.googleapis.com/v0/b/${blob?.bucket}/o/$encodedBlobName?alt=media"
                                 println("tu=$targetUrl")
                             }
+                            else -> {}
                         }
                     }
-                    return@post call.respond(
-                        HttpStatusCode.OK,
-                        "Изображение загружено"
-                    )
+                    when(val setImageRes = setCategoryImage(categoryId, targetUrl)) {
+                        is Reaction.Success -> {
+                            return@post call.respond(
+                                HttpStatusCode.OK,
+                                "Image uploaded"
+                            )
+                        }
+                        is Reaction.Error -> {
+                            return@post call.respond(
+                                status = HttpStatusCode.InternalServerError,
+                                ErrorResponse(ApiError(message = "InternalServerError"))
+                            )
+                        }
+                    }
                 } else {
                     return@post call.respond(
                         status = HttpStatusCode.Forbidden,
@@ -233,34 +245,24 @@ fun Route.updateCategoryImageRoute() {
     }
 }
 
-//suspend fun updateCategoryImage() {
-//
-//    //        fun savePhoto(category: MenuCategory, uri: Uri?, callback: (uri: String?) -> Unit) {
-//    //            if(uri != null) {
-//    //                val path =
-//    //                    REF_STORAGE_CATEGORY_IMAGE
-//    //                        .child(category.id!!)
-//    //                path.putFile(uri).addOnCompleteListener { task1 ->
-//    //                    if(task1.isSuccessful) {
-//    //                        path.downloadUrl.addOnCompleteListener { task2 ->
-//    //                            if(task2.isSuccessful) {
-//    //                                val photoUrl = task2.result.toString()
-//    //                                category.imageURL = photoUrl
-//    //                                updateCategory(category) {
-//    //                                    Log.d("url=", category.imageURL.toString())
-//    //                                    callback(photoUrl)
-//    //                                }
-//    //                            } else {
-//    //                                callback(null)
-//    //                            }
-//    //                        }
-//    //                    } else {
-//    //                        callback(null)
-//    //                    }
-//    //                }
-//    //            }
-//    //        }
-//}
+suspend fun setCategoryImage(categoryId: String, imageUrl: String) : Reaction<Boolean> {
+    return suspendCoroutine { continuation ->
+        REF_CATEGORIES
+            .child(categoryId)
+            .child("imageUrl")
+            .setValue(imageUrl) { error, _ ->
+                if(error != null) {
+                    continuation.resume(
+                        Reaction.Error(error.toException())
+                    )
+                } else {
+                    continuation.resume(
+                        Reaction.Success(true)
+                    )
+                }
+            }
+    }
+}
 
 suspend fun addCategory(category: MenuCategory): Reaction<MenuCategory> {
     return suspendCoroutine { cont ->
