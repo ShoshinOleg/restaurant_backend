@@ -1,6 +1,6 @@
 package com.shoshin.plugins
 
-import com.shoshin.routes.registerDishesRoutes
+import com.shoshin.routes.dish.registerDishesRoutes
 import com.shoshin.routes.registerMenuCategoriesRoutes
 import com.shoshin.routes.registerOrderRoutes
 import com.shoshin.routes.registerUserRoutes
