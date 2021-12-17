@@ -4,11 +4,16 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 
-suspend fun ApplicationCall.ok(message: String = "Ok") {
+suspend inline fun <reified T : Any>  ApplicationCall.ok(message: T) {
     respond(
-        respond(
-            HttpStatusCode.OK,
-            message
-        )
+        HttpStatusCode.OK,
+        message
+    )
+}
+
+suspend fun ApplicationCall.ok() {
+    respond(
+        HttpStatusCode.OK,
+        "OK"
     )
 }

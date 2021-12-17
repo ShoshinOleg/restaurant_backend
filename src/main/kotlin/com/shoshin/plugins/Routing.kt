@@ -1,14 +1,15 @@
 package com.shoshin.plugins
 
-import com.shoshin.routes.registerDishesRoutes
-import com.shoshin.routes.registerMenuCategoriesRoutes
-import com.shoshin.routes.registerOrderRoutes
-import com.shoshin.routes.registerUserRoutes
+import com.shoshin.routes.categories.registerCategoriesRoutes
+import com.shoshin.routes.dishes.options.registerDishesOptionsRoutes
+import com.shoshin.routes.dishes.options.variants.registerVariantsRoutes
+import com.shoshin.routes.dishes.registerDishesRoutes
+import com.shoshin.routes.orders.registerOrderRoutes
+import com.shoshin.routes.schedule.scheduleRoutes
+import com.shoshin.routes.users.registerUserRoutes
 import io.ktor.routing.*
-import io.ktor.http.*
 import io.ktor.application.*
 import io.ktor.response.*
-import io.ktor.request.*
 
 fun Application.configureRouting() {
 
@@ -19,7 +20,10 @@ fun Application.configureRouting() {
         }
     }
     registerOrderRoutes()
-    registerMenuCategoriesRoutes()
-    registerDishesRoutes()
     registerUserRoutes()
+    registerCategoriesRoutes()
+    registerDishesRoutes()
+    registerDishesOptionsRoutes()
+    registerVariantsRoutes()
+    scheduleRoutes()
 }

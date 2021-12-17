@@ -7,9 +7,13 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.cloud.FirestoreClient
 import com.google.firebase.cloud.StorageClient
+import com.google.firebase.messaging.FirebaseMessaging
+import com.shoshin.firebase.services.MessagingService
 import java.io.ByteArrayInputStream
 
 var firebaseStorage: Bucket? = null
+var firebaseMessaging: FirebaseMessaging? = null
+var messagingService: MessagingService? = null
 
 fun initFirebase() {
     val serviceAccount = getEnvServiceAccount() ?: getLocalServiceAccount()
@@ -21,8 +25,8 @@ fun initFirebase() {
     FirebaseApp.initializeApp(options)
 
     firebaseStorage = StorageClient.getInstance(FirebaseApp.getInstance()).bucket("restaurant-48d90.appspot.com")
-
-//    firebaseStorage = StorageClient.getInstance().bucket()
+    firebaseMessaging = FirebaseMessaging.getInstance(FirebaseApp.getInstance())
+    messagingService = MessagingService()
 }
 
 private fun getEnvServiceAccount() = System.getenv("ADMIN_KEY")?.let { ByteArrayInputStream(it.toByteArray()) }

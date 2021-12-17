@@ -6,9 +6,9 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 
-suspend fun ApplicationCall.badRequest() {
+suspend fun ApplicationCall.badRequest(errorMessage: String = "BadRequest") {
     respond(
         status = HttpStatusCode.BadRequest,
-        ErrorResponse(ApiError(message = "BadRequest"))
+        ErrorResponse(ApiError(message = errorMessage))
     )
 }
