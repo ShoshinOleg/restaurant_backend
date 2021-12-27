@@ -26,4 +26,5 @@ fun Application.configureRouting() {
     registerDishesOptionsRoutes()
     registerVariantsRoutes()
     scheduleRoutes()
+
 }
