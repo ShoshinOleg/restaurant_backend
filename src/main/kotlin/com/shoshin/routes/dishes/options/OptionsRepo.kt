@@ -15,6 +15,7 @@ class OptionsRepo {
                 if(option.id == null) {
                     option.id = newOptionId(dishId)
                 }
+                println("optionId=${option.id}")
                 DishesRepo.REF_DISHES
                     .child(dishId)
                     .child("options")
