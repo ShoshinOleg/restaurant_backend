@@ -13,7 +13,7 @@ import io.ktor.request.*
 import io.ktor.routing.*
 
 fun Route.updateDishRoute() {
-    put("/categories/{id}/dishes") {
+    put("/dishes/{id}") {
         val dish = call.receive<Dish>()
         val principal = call.principal<FirebasePrincipal>() ?: return@put call.internalServerError()
 
