@@ -7,7 +7,7 @@ import com.shoshin.common.default_responses.ok
 import io.ktor.application.*
 import io.ktor.routing.*
 
-fun Route.dishesRoute() {
+fun Route.getDishesRoute() {
     get("/categories/{id}/dishes") {
         println("GET: /categories/{id}/dishes")
         val categoryId = call.parameters["id"] ?: return@get call.badRequest()

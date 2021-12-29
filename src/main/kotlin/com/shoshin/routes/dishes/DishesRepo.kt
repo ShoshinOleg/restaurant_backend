@@ -93,16 +93,20 @@ class DishesRepo {
             }
         }
 
-        suspend fun updateDish(dish: Dish, categoryId: String): Reaction<Dish> {
+        suspend fun updateDish(dish: Dish, categoryId: String? = null): Reaction<Dish> {
             when(val addDishResult = addDish(dish)) {
                 is Reaction.Success -> {
-                    when(val addToCatResult = addDishToCategory(dish,categoryId)) {
-                        is Reaction.Success -> {
-                            return addToCatResult
+                    if(categoryId != null) {
+                        when(val addToCatResult = addDishToCategory(dish,categoryId)) {
+                            is Reaction.Success -> {
+                                return addToCatResult
+                            }
+                            is Reaction.Error -> {
+                                return addToCatResult
+                            }
                         }
-                        is Reaction.Error -> {
-                            return addToCatResult
-                        }
+                    } else {
+                        return addDishResult
                     }
                 }
                 is Reaction.Error -> {

@@ -6,9 +6,10 @@ import io.ktor.routing.*
 
 fun Application.registerDishesRoutes() {
     routing {
-        dishesRoute()
-        updateDishRoute()
+        getDishesRoute()
         authenticate("firebase") {
+            addDishRoute()
+            updateDishRoute()
             setImageForDishRoute()
             removeDishRoute()
         }
