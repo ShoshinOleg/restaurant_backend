@@ -23,7 +23,7 @@ fun Route.addOptionRoute() {
             is Reaction.Success -> {
                 if(isAdmin.data) {
                     when(OptionsRepo.addOption(dishId, option)) {
-                        is Reaction.Success -> return@post call.ok()
+                        is Reaction.Success -> return@post call.ok(option)
                         is Reaction.Error -> return@post call.internalServerError()
                     }
                 } else return@post call.forbidden()
