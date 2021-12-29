@@ -8,7 +8,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class OptionsRepo {
     companion object {
-        private fun newOptionId(dishId: String) = DishesRepo.REF_DISHES.child(dishId).key
+        private fun newOptionId(dishId: String) = DishesRepo.REF_DISHES.child(dishId).child("options").key
 
         suspend fun addOption(dishId: String, option: DishOption) : Reaction<Boolean> {
             return suspendCoroutine { continuation ->
