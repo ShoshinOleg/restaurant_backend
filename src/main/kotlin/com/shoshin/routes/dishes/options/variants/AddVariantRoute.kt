@@ -26,7 +26,7 @@ fun Route.addVariantRoute() {
                     return@post call.forbidden()
                 } else {
                     when(VariantsRepo.addVariant(dishId, optionId, variant)) {
-                        is Reaction.Success -> return@post call.ok()
+                        is Reaction.Success -> return@post call.ok(variant)
                         is Reaction.Error -> return@post call.internalServerError()
                     }
                 }
