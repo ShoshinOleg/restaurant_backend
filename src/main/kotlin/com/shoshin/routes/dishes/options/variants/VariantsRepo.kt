@@ -16,6 +16,7 @@ class VariantsRepo {
             .child("options")
             .child(optionId)
             .child("variants")
+            .push()
             .key
 
         suspend fun addVariant(
