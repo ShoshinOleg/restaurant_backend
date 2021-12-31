@@ -41,8 +41,13 @@ class ScheduleRepo {
                             if(snapshot == null) {
                                 continuation.resume(Reaction.Error(Throwable("Not found")))
                             } else {
+                                var schedule = snapshot.getValue(WeekSchedule::class.java)
+                                if(schedule == null) {
+                                    println("schedule==null")
+                                    schedule = WeekSchedule()
+                                }
                                  continuation.resume(
-                                    Reaction.Success(snapshot.getValue(WeekSchedule::class.java))
+                                    Reaction.Success(schedule)
                                 )
                             }
                         }
