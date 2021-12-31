@@ -10,7 +10,10 @@ fun Route.getDefaultScheduleRoute() {
     get("schedules/default") {
         when(val result = ScheduleRepo.getDefaultSchedule()) {
             is Reaction.Error -> return@get call.internalServerError()
-            is Reaction.Success -> return@get call.ok(result.data)
+            is Reaction.Success -> {
+                println("result=${result.data}")
+                return@get call.ok(result.data)
+            }
         }
     }
 }
