@@ -41,7 +41,7 @@ class ScheduleRepo {
                             if(snapshot == null) {
                                 continuation.resume(Reaction.Error(Throwable("Not found")))
                             } else {
-                                continuation.resume(
+                                 continuation.resume(
                                     Reaction.Success(snapshot.getValue(WeekSchedule::class.java))
                                 )
                             }
