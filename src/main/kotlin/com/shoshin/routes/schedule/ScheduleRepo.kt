@@ -3,6 +3,7 @@ package com.shoshin.routes.schedule
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.shoshin.common.Reaction
+import com.shoshin.models.schedule.DayWeekSchedule
 import com.shoshin.models.schedule.WeekSchedule
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
@@ -29,6 +30,12 @@ class ScheduleRepo {
                         }
 
                     }
+            }
+        }
+
+        suspend fun updateDefaultDaySchedule(dayWeekSchedule: DayWeekSchedule) : Reaction<DayWeekSchedule> {
+            return suspendCoroutine { continuation ->
+
             }
         }
 

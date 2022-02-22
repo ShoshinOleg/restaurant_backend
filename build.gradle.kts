@@ -32,8 +32,6 @@ dependencies {
     implementation("com.google.firebase:firebase-admin:8.1.0")
     implementation("com.google.gms:google-services:4.3.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC3")
-//    implementation(platform("com.google.cloud:libraries-bom:24.1.0"))
-//    implementation("com.google.cloud:google-cloud-storage")
 }
 
 tasks.create("stage") {
