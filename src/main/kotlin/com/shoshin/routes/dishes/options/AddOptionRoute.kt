@@ -1,6 +1,5 @@
 package com.shoshin.routes.dishes.options
 
-import com.shoshin.common.Reaction
 import com.shoshin.common.default_responses.badRequest
 import com.shoshin.common.default_responses.forbidden
 import com.shoshin.common.default_responses.internalServerError
@@ -19,16 +18,11 @@ fun Route.addOptionRoute() {
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.internalServerError()
         val option = call.receive<DishOption>()
 
-        when(val isAdmin = UsersRepo.checkRole(principal, "admin")) {
-            is Reaction.Success -> {
-                if(isAdmin.data) {
-                    when(OptionsRepo.addOption(dishId, option)) {
-                        is Reaction.Success -> return@post call.ok(option)
-                        is Reaction.Error -> return@post call.internalServerError()
-                    }
-                } else return@post call.forbidden()
-            }
-            is Reaction.Error -> return@post call.internalServerError()
+        if(!UsersRepo.checkRole(principal, "admin")) {
+            return@post call.forbidden()
+        } else {
+            OptionsRepo.addOption(dishId, option)
+            return@post call.ok(option)
         }
     }
 }

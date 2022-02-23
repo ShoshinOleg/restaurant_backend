@@ -1,6 +1,5 @@
 package com.shoshin.routes.dishes.options.variants
 
-import com.shoshin.common.Reaction
 import com.shoshin.common.default_responses.badRequest
 import com.shoshin.common.default_responses.forbidden
 import com.shoshin.common.default_responses.internalServerError
@@ -20,18 +19,11 @@ fun Route.addVariantRoute() {
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.internalServerError()
         val variant = call.receive<DishOptionVariant>()
 
-        when(val isAdmin = UsersRepo.checkRole(principal, "admin")) {
-            is Reaction.Success -> {
-                if(!isAdmin.data) {
-                    return@post call.forbidden()
-                } else {
-                    when(VariantsRepo.addVariant(dishId, optionId, variant)) {
-                        is Reaction.Success -> return@post call.ok(variant)
-                        is Reaction.Error -> return@post call.internalServerError()
-                    }
-                }
-            }
-            is Reaction.Error -> return@post call.internalServerError()
+        if(!UsersRepo.checkRole(principal, "admin")) {
+            return@post call.forbidden()
+        } else {
+            VariantsRepo.addVariant(dishId, optionId, variant)
+            return@post call.ok(variant)
         }
     }
 }

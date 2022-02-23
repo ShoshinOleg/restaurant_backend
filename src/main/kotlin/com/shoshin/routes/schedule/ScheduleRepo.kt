@@ -5,7 +5,6 @@ import com.google.firebase.database.*
 import com.shoshin.common.Reaction
 import com.shoshin.models.schedule.DayWeekSchedule
 import com.shoshin.models.schedule.WeekSchedule
-import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

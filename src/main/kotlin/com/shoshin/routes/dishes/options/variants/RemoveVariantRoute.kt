@@ -1,6 +1,5 @@
 package com.shoshin.routes.dishes.options.variants
 
-import com.shoshin.common.Reaction
 import com.shoshin.common.default_responses.badRequest
 import com.shoshin.common.default_responses.forbidden
 import com.shoshin.common.default_responses.internalServerError
@@ -18,18 +17,13 @@ fun Route.removeVariantRoute() {
         val variantId = call.parameters["variantId"] ?: return@delete call.badRequest()
         val principal = call.principal<FirebasePrincipal>() ?: return@delete call.internalServerError()
 
-        when(val isAdmin = UsersRepo.checkRole(principal, "admin")) {
-            is Reaction.Success -> {
-                if(!isAdmin.data) {
-                    return@delete call.forbidden()
-                } else {
-                    when(VariantsRepo.removeVariant(dishId, optionId, variantId)) {
-                        is Reaction.Success -> return@delete call.ok()
-                        is Reaction.Error -> return@delete call.internalServerError()
-                    }
-                }
-            }
-            is Reaction.Error -> return@delete call.internalServerError()
+
+        if(!UsersRepo.checkRole(principal, "admin")) {
+            return@delete call.forbidden()
+        } else {
+            val variant = VariantsRepo.getVariant(dishId, optionId, variantId)
+            VariantsRepo.removeVariant(dishId, optionId, variantId)
+            return@delete call.ok(variant)
         }
     }
 }

@@ -3,11 +3,8 @@ package com.shoshin.plugins
 import com.google.firebase.FirebaseApp
 import com.shoshin.firebase.FirebasePrincipal
 import com.shoshin.firebase.firebase
-import io.ktor.auth.*
-import io.ktor.util.*
 import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
+import io.ktor.auth.*
 
 fun Application.configureSecurity() {
     authentication {

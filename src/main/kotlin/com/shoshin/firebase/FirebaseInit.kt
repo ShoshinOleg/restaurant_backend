@@ -1,11 +1,9 @@
 package com.shoshin.firebase
 
 import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.firestore.Firestore
 import com.google.cloud.storage.Bucket
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
-import com.google.firebase.cloud.FirestoreClient
 import com.google.firebase.cloud.StorageClient
 import com.google.firebase.messaging.FirebaseMessaging
 import com.shoshin.firebase.services.MessagingService

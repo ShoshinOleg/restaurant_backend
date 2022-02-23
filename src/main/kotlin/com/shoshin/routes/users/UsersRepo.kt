@@ -33,23 +33,15 @@ class UsersRepo {
             }
         }
 
-        suspend fun checkRole(principal: FirebasePrincipal, role: String): Reaction<Boolean> {
+        suspend fun checkRole(principal: FirebasePrincipal, role: String): Boolean {
             return suspendCoroutine {  cont ->
                 REF_ROLES.child(role)
                     .child(principal.userId)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot?) {
-                            val isAdmin = snapshot?.getValue(Boolean::class.java)
-                            cont.resume(
-                                Reaction.Success(isAdmin!!)
-                            )
-                        }
+                        override fun onDataChange(snapshot: DataSnapshot?) =
+                            cont.resume(snapshot?.getValue(Boolean::class.java)!!)
 
-                        override fun onCancelled(error: DatabaseError?) {
-                            cont.resume(
-                                Reaction.Success(false)
-                            )
-                        }
+                        override fun onCancelled(error: DatabaseError?) = cont.resume(false)
                     })
             }
         }

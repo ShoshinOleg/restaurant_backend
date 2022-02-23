@@ -1,7 +1,5 @@
 package com.shoshin.routes.users
 
-import com.shoshin.common.ApiError
-import com.shoshin.common.ErrorResponse
 import com.shoshin.common.Reaction
 import com.shoshin.common.default_responses.internalServerError
 import com.shoshin.common.default_responses.ok

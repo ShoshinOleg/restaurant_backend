@@ -7,9 +7,9 @@ import com.shoshin.routes.dishes.registerDishesRoutes
 import com.shoshin.routes.orders.registerOrderRoutes
 import com.shoshin.routes.schedule.scheduleRoutes
 import com.shoshin.routes.users.registerUserRoutes
-import io.ktor.routing.*
 import io.ktor.application.*
 import io.ktor.response.*
+import io.ktor.routing.*
 
 fun Application.configureRouting() {
 

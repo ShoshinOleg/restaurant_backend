@@ -2,9 +2,9 @@ package com.shoshin.routes.dishes
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
-import com.shoshin.common.Reaction
 import com.shoshin.models.dishes.Dish
 import com.shoshin.routes.categories.REF_CATEGORIES
+import io.ktor.features.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -14,7 +14,27 @@ class DishesRepo {
             .child("menu")
             .child("dishes")
 
-        suspend fun getDishesIdsForCategory(categoryId: String): Reaction<List<String>> {
+        fun newDishId(): String = REF_DISHES.push().key
+
+        suspend fun getDish(dishId: String): Dish =
+            suspendCoroutine { continuation ->
+                REF_DISHES.child(dishId)
+                    .addListenerForSingleValueEvent(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot?) {
+                            if(snapshot != null) {
+                                val dish = snapshot.getValue(Dish::class.java)
+                                continuation.resume(dish)
+                            } else {
+                                throw NotFoundException("Dish with id=$dishId not found")
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError?) =
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
+                    })
+            }
+
+        suspend fun getDishesIdsForCategory(categoryId: String): List<String> {
             return suspendCoroutine { continuation ->
                 REF_CATEGORIES
                     .child(categoryId)
@@ -28,23 +48,18 @@ class DishesRepo {
                                         child.getValue(String::class.java)
                                     )
                                 }
-                                continuation.resume(Reaction.Success(mutableDishesIds))
-                            } else {
-                                continuation.resume(Reaction.Error(Throwable("Not found")))
-                            }
+                                continuation.resume(mutableDishesIds)
+                            } else
+                                throw NotFoundException()
                         }
 
-                        override fun onCancelled(error: DatabaseError?) {
-                            println("getDishesIdsForCategory = ${error?.message}")
-                            continuation.resume(
-                                Reaction.Error(Throwable(error?.message, error?.toException()?.cause))
-                            )
-                        }
+                        override fun onCancelled(error: DatabaseError?) =
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
                     })
             }
         }
 
-        suspend fun getDishes(dishIds: List<String>): Reaction<List<Dish>> {
+        suspend fun getDishes(dishIds: List<String>): List<Dish> {
             return suspendCoroutine { continuation ->
                 REF_DISHES
                     .addListenerForSingleValueEvent(object: ValueEventListener {
@@ -57,136 +72,90 @@ class DishesRepo {
                                         dishes.add(dish)
                                     }
                                 }
-                                continuation.resume(Reaction.Success(dishes))
-                            } else {
-                                continuation.resume(Reaction.Error(Throwable("Not found")))
-                            }
+                                continuation.resume(dishes)
+                            } else
+                                throw NotFoundException()
                         }
 
-                        override fun onCancelled(error: DatabaseError?) {
-                            println("getDishes = ${error?.message}")
-                            continuation.resume(
-                                Reaction.Error(Throwable(error?.message, error?.toException()?.cause))
-                            )
-                        }
-
+                        override fun onCancelled(error: DatabaseError?) =
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
                     })
             }
         }
 
-        suspend fun setDishImage(dishId: String, url: String): Reaction<Boolean> {
+        suspend fun setDishImage(dishId: String, url: String): Boolean {
             return suspendCoroutine { continuation ->
                 DishesRepo.REF_DISHES
                     .child(dishId)
                     .child("imageURL")
                     .setValue(url) { error, _ ->
-                        if(error != null) {
-                            continuation.resume(
-                                Reaction.Error(error.toException())
-                            )
-                        } else {
-                            continuation.resume(
-                                Reaction.Success(true)
-                            )
-                        }
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(true)
                     }
             }
         }
 
-        suspend fun updateDish(dish: Dish, categoryId: String? = null): Reaction<Dish> {
-            when(val addDishResult = addDish(dish)) {
-                is Reaction.Success -> {
-                    if(categoryId != null) {
-                        when(val addToCatResult = addDishToCategory(dish,categoryId)) {
-                            is Reaction.Success -> {
-                                return addToCatResult
-                            }
-                            is Reaction.Error -> {
-                                return addToCatResult
-                            }
-                        }
-                    } else {
-                        return addDishResult
-                    }
-                }
-                is Reaction.Error -> {
-                    return addDishResult
-                }
+        suspend fun updateDish(dish: Dish, categoryId: String? = null) {
+            addDish(dish)
+            if(categoryId != null) {
+                addDishToCategory(dish,categoryId)
             }
         }
 
-        suspend fun addDishToCategory(dish: Dish, categoryId: String): Reaction<Dish> {
+        suspend fun addDishToCategory(dish: Dish, categoryId: String): Dish {
             return suspendCoroutine { continuation ->
                 REF_CATEGORIES
                     .child(categoryId)
                     .child("dishesIds")
                     .child(dish.id)
                     .setValue(dish.id) { error, ref ->
-                        if(error != null ) {
-                            continuation.resume(
-                                Reaction.Error(error.toException())
-                            )
-                        } else {
-                            continuation.resume(
-                                Reaction.Success(dish)
-                            )
-                        }
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(dish)
                     }
             }
         }
 
-        suspend fun addDish(dish: Dish): Reaction<Dish> {
+        suspend fun addDish(dish: Dish): Dish {
             return suspendCoroutine { continuation ->
                 REF_DISHES
                     .child(dish.id)
-                    .setValue(dish) { error, ref ->
-                        if(error != null ) {
-                            continuation.resume(
-                                Reaction.Error(error.toException())
-                            )
-                        } else {
-                            continuation.resume(
-                                Reaction.Success(dish)
-                            )
-                        }
+                    .setValue(dish) { error, _ ->
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(dish)
                     }
             }
         }
 
-        suspend fun removeDishFromCategory(categoryId: String, dishId: String) : Reaction<Boolean> {
+        suspend fun removeDishFromCategory(categoryId: String, dishId: String) : Boolean {
             return suspendCoroutine { continuation ->
                 REF_CATEGORIES
                     .child(categoryId)
                     .child("dishesIds")
                     .child(dishId)
-                    .removeValue { error, ref ->
-                        if(error != null) {
-                            continuation.resume(
-                                Reaction.Error(error.toException())
-                            )
-                        } else {
-                            continuation.resume(
-                                Reaction.Success(true)
-                            )
-                        }
+                    .removeValue { error, _ ->
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(true)
                     }
             }
         }
 
-        suspend fun removeDish(dishId: String) : Reaction<Boolean> {
+        suspend fun removeDish(dishId: String) : Boolean {
             return suspendCoroutine { continuation ->
                 REF_DISHES
                     .child(dishId)
-                    .removeValue { error, ref ->
-                        if(error != null) {
-                            continuation.resume(
-                                Reaction.Error(error.toException())
-                            )
-                        } else {
-                            continuation.resume(
-                                Reaction.Success(true)
-                            )
-                        }
+                    .removeValue { error, _ ->
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(true)
                     }
             }
         }
