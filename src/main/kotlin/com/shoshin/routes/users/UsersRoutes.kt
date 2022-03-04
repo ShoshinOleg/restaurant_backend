@@ -9,6 +9,7 @@ fun Application.registerUserRoutes() {
         authenticate("firebase") {
             registerSignInUserRoute()
             hasRoleRoute()
+            updateUserRoute()
         }
     }
 }

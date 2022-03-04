@@ -3,7 +3,9 @@ package com.shoshin.routes.users
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.shoshin.common.Reaction
+import com.shoshin.common.exceptions.ForbiddenError
 import com.shoshin.firebase.FirebasePrincipal
+import com.shoshin.models.users.RestaurantUser
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -15,20 +17,27 @@ class UsersRepo {
         val REF_ROLES: DatabaseReference = FirebaseDatabase.getInstance(FirebaseApp.getInstance()).reference
             .child("roles")
 
-        suspend fun onSignUser(principal: FirebasePrincipal): Reaction<Unit> {
+        suspend fun updateUser(principal: FirebasePrincipal, user: RestaurantUser): Unit =
+            suspendCoroutine { continuation ->
+                if(principal.userId != user.id) throw ForbiddenError()
+                REF_USERS.child(principal.userId)
+                    .setValue(user) { error, _ ->
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(Unit)
+                    }
+            }
+
+        suspend fun onSignUser(principal: FirebasePrincipal) {
             return suspendCoroutine { continuation ->
                 REF_USERS.child(principal.userId)
                     .child("id")
-                    .setValue(principal.userId) { error, ref ->
-                        if(error != null ) {
-                            continuation.resume(
-                                Reaction.Error(error.toException())
-                            )
-                        } else {
-                            continuation.resume(
-                                Reaction.Success(Unit)
-                            )
-                        }
+                    .setValue(principal.userId) { error, _ ->
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(Unit)
                     }
             }
         }
