@@ -20,12 +20,13 @@ class LocationsRepo {
                     .child(userId)
                     .addListenerForSingleValueEvent(object: ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot?) {
-                            val locations = mutableListOf<Location>()
                             if(snapshot != null) {
+                                val locations = mutableListOf<Location>()
                                 for(child in snapshot.children)
                                     locations.add(child.getValue(Location::class.java))
-                            }
-                            continuation.resume(locations)
+                                continuation.resume(locations)
+                            } else
+                                throw NotFoundException()
                         }
 
                         override fun onCancelled(error: DatabaseError?) =

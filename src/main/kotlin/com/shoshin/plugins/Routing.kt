@@ -4,6 +4,7 @@ import com.shoshin.routes.categories.registerCategoriesRoutes
 import com.shoshin.routes.dishes.options.registerDishesOptionsRoutes
 import com.shoshin.routes.dishes.options.variants.registerVariantsRoutes
 import com.shoshin.routes.dishes.registerDishesRoutes
+import com.shoshin.routes.locations.locationsRoutes
 import com.shoshin.routes.orders.registerOrderRoutes
 import com.shoshin.routes.schedule.scheduleRoutes
 import com.shoshin.routes.users.registerUserRoutes
@@ -26,5 +27,5 @@ fun Application.configureRouting() {
     registerDishesOptionsRoutes()
     registerVariantsRoutes()
     scheduleRoutes()
-
+    locationsRoutes()
 }
