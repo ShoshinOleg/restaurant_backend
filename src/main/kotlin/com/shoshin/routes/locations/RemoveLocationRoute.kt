@@ -12,7 +12,7 @@ fun Route.removeLocationRoute() {
     delete("/locations/{locationId}") {
         val locationId: String = call.parameters["locationId"] ?: return@delete call.badRequest()
         val principal = call.principal<FirebasePrincipal>() ?: return@delete call.internalServerError()
-        val location = LocationsRepo.getLocation(principal.userId)
+        val location = LocationsRepo.getLocation(locationId)
         LocationsRepo.removeLocation(principal.userId, locationId)
         return@delete call.ok(location)
     }
