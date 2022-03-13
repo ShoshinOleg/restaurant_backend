@@ -34,9 +34,10 @@ class LocationsRepo {
                     })
             }
 
-        suspend fun getLocation(userId: String): Location =
+        suspend fun getLocation(userId: String, locationId: String): Location =
             suspendCoroutine { continuation ->
                 REF_LOCATIONS.child(userId)
+                    .child(locationId)
                     .addListenerForSingleValueEvent(object: ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot?) {
                             if(snapshot != null)
