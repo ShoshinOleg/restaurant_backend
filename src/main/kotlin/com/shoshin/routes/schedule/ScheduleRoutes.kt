@@ -9,6 +9,7 @@ fun Application.scheduleRoutes() {
         getDefaultScheduleRoute()
         authenticate("firebase") {
             updateDefaultScheduleRoute()
+            updateDefaultScheduleDayRoute()
         }
     }
 }

@@ -2,6 +2,7 @@ package com.shoshin.routes.schedule
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
+import com.shoshin.models.schedule.DayWeekSchedule
 import com.shoshin.models.schedule.WeekSchedule
 import io.ktor.features.*
 import kotlin.coroutines.resume
@@ -20,6 +21,19 @@ class ScheduleRepo {
                             throw error.toException()
                         else
                             continuation.resume(true)
+                    }
+            }
+        }
+
+        suspend fun updateDefaultScheduleDay(day: DayWeekSchedule) {
+            return suspendCoroutine { continuation ->
+                REF_SCHEDULE.child("default")
+                    .child("${day.dayOfWeek}")
+                    .setValue(day) { error, _ ->
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(Unit)
                     }
             }
         }
