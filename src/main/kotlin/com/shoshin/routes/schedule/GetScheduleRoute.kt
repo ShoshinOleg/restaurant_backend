@@ -7,7 +7,6 @@ import io.ktor.routing.*
 
 fun Route.getDefaultScheduleRoute() {
     get("schedules/default") {
-        return@get call.ok(WeekSchedule())
         val schedule = ScheduleRepo.getDefaultSchedule()
         return@get call.ok(schedule)
     }

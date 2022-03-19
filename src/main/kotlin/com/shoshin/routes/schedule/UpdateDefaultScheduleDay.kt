@@ -13,7 +13,6 @@ import io.ktor.routing.*
 
 fun Route.updateDefaultScheduleDayRoute() {
     post("schedules/default/day") {
-        return@post call.ok()
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.internalServerError()
         val daySchedule = call.receive<DayWeekSchedule>()
         if(!UsersRepo.checkRole(principal, "admin")) {
