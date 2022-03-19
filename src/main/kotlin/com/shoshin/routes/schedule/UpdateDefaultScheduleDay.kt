@@ -19,7 +19,7 @@ fun Route.updateDefaultScheduleDayRoute() {
             return@post call.forbidden()
         } else {
             ScheduleRepo.updateDefaultScheduleDay(daySchedule)
-            return@post call.ok()
+            return@post call.ok(daySchedule)
         }
     }
 }
