@@ -28,6 +28,7 @@ class ScheduleRepo {
         suspend fun updateDefaultScheduleDay(day: DayWeekSchedule) {
             return suspendCoroutine { continuation ->
                 REF_SCHEDULE.child("default")
+                    .child("days")
                     .child("${day.dayOfWeek}")
                     .setValue(day) { error, _ ->
                         if(error != null )
