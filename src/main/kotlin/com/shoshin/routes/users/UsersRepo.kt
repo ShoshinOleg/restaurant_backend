@@ -5,6 +5,8 @@ import com.google.firebase.database.*
 import com.shoshin.common.Reaction
 import com.shoshin.common.exceptions.ForbiddenError
 import com.shoshin.firebase.FirebasePrincipal
+import com.shoshin.models.orders.Order
+import com.shoshin.models.orders.OrderMetadata
 import com.shoshin.models.users.RestaurantUser
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -156,6 +158,44 @@ class UsersRepo {
                         }
                     })
 
+            }
+        }
+
+        suspend fun setOrder(order: Order) {
+            return suspendCoroutine { continuation ->
+                REF_USERS
+                    .child(order.customerId)
+                    .child("ordersInfo")
+                    .child(order.id)
+                    .setValue(order.getOrderMetaData()) { error, _ ->
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(Unit)
+                    }
+            }
+        }
+
+        suspend fun getOrdersMetadata(userId: String): List<OrderMetadata> {
+            return suspendCoroutine { continuation ->
+                REF_USERS
+                    .child(userId)
+                    .child("ordersInfo")
+                    .addListenerForSingleValueEvent(object: ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot?) {
+                            val ordersMetadata = mutableListOf<OrderMetadata>()
+                            if(snapshot != null) {
+                                for (child in snapshot.children) {
+                                    ordersMetadata.add(child.getValue(OrderMetadata::class.java))
+                                }
+                            }
+                            continuation.resume(ordersMetadata)
+                        }
+
+                        override fun onCancelled(error: DatabaseError?) {
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
+                        }
+                    })
             }
         }
     }
