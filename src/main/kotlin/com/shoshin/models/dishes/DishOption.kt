@@ -6,5 +6,6 @@ data class DishOption (
     var name: String? = null,
     var variants: HashMap<String, DishOptionVariant>? = hashMapOf(),
     var isMultiCheck: Boolean = false,
-    var isNecessary: Boolean = false
+    var isNecessary: Boolean = false,
+    var isChecked: Boolean? = null
 )
