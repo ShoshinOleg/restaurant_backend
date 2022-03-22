@@ -7,6 +7,7 @@ import io.ktor.routing.*
 fun Application.registerOrderRoutes() {
     routing {
         authenticate("firebase") {
+            getOrdersMetadataRoute()
             makeOrder()
         }
     }
