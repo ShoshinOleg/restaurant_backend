@@ -20,12 +20,10 @@ fun Application.configureStatusPage() {
                     message = statusException.message ?: statusException.cause?.message ?: ""
                 )
             )
-            throw statusException
         }
         exception<Throwable> { cause ->
             println("throwable.message=${cause.message}")
             call.internalServerError(throwable = cause)
-            throw cause
         }
     }
 }
