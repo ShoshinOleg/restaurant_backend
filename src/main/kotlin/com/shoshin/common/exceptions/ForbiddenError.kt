@@ -5,5 +5,5 @@ import io.ktor.http.*
 class ForbiddenError(message: String? = "Forbidden error") :
     StatusException(
         message = message,
-        code = HttpStatusCode.Forbidden.value
+        code = HttpStatusCode.Forbidden
     )

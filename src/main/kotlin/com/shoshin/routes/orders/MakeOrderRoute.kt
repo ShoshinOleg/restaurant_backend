@@ -13,8 +13,10 @@ import io.ktor.routing.*
 fun Route.makeOrder() {
     post("orders") {
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.internalServerError()
+
         println("o1")
         println("call.request = ${call.request}")
+//        call.response
         val order = call.receive<Order>()
         println("o2")
         if(principal.userId != order.customerId) {

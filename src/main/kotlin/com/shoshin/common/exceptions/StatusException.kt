@@ -4,6 +4,6 @@ import io.ktor.http.*
 
 open class StatusException(
     message: String?,
-    open val code: Int = HttpStatusCode.InternalServerError.value,
+    open val code: HttpStatusCode = HttpStatusCode.InternalServerError,
     cause: Throwable? = null
 ) : Exception(message, cause)
