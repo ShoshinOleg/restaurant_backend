@@ -3,6 +3,7 @@ package com.shoshin.routes.orders
 import com.shoshin.common.default_responses.forbidden
 import com.shoshin.common.default_responses.internalServerError
 import com.shoshin.common.default_responses.ok
+import com.shoshin.common.exceptions.ForbiddenError
 import com.shoshin.firebase.FirebasePrincipal
 import com.shoshin.models.orders.Order
 import io.ktor.application.*
@@ -12,7 +13,7 @@ import io.ktor.routing.*
 
 fun Route.makeOrder() {
     post("orders") {
-        return@post call.internalServerError()
+        throw ForbiddenError()
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.internalServerError()
 
         println("o1")
