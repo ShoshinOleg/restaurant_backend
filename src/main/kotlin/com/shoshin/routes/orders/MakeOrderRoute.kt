@@ -13,7 +13,6 @@ import io.ktor.routing.*
 
 fun Route.makeOrder() {
     post("orders") {
-        throw ForbiddenError()
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.internalServerError()
 
         println("o1")
