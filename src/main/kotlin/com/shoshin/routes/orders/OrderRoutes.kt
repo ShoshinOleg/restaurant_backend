@@ -9,6 +9,7 @@ fun Application.registerOrderRoutes() {
         authenticate("firebase") {
             getOrdersMetadataRoute()
             makeOrder()
+            getOrderRoute()
         }
     }
 }

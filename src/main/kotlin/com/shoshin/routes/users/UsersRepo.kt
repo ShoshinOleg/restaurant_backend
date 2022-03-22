@@ -8,6 +8,7 @@ import com.shoshin.firebase.FirebasePrincipal
 import com.shoshin.models.orders.Order
 import com.shoshin.models.orders.OrderMetadata
 import com.shoshin.models.users.RestaurantUser
+import io.ktor.features.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -173,6 +174,28 @@ class UsersRepo {
                         else
                             continuation.resume(Unit)
                     }
+            }
+        }
+
+        suspend fun getOrderMetadata(userId: String, orderId: String): OrderMetadata {
+            return suspendCoroutine { continuation ->
+                REF_USERS
+                    .child(userId)
+                    .child("ordersInfo")
+                    .child(orderId)
+                    .addListenerForSingleValueEvent(object: ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot?) {
+                            if(snapshot != null) {
+                                continuation.resume(snapshot.getValue(OrderMetadata::class.java))
+                            } else {
+                                throw NotFoundException()
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError?) {
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
+                        }
+                    })
             }
         }
 
