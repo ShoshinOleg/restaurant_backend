@@ -12,6 +12,7 @@ import io.ktor.response.*
 fun Application.configureStatusPage() {
     install(StatusPages) {
         exception<StatusException> { statusException ->
+            println(statusException.message)
             call.respond(
                 status = statusException.code,
                 message = ErrorInfo(
@@ -19,9 +20,12 @@ fun Application.configureStatusPage() {
                     message = statusException.message ?: statusException.cause?.message ?: ""
                 )
             )
+            throw statusException
         }
         exception<Throwable> { cause ->
+            println(cause.message)
             call.internalServerError(throwable = cause)
+            throw cause
         }
     }
 }
