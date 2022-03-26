@@ -10,6 +10,7 @@ fun Application.registerUserRoutes() {
             registerSignInUserRoute()
             hasRoleRoute()
             updateUserRoute()
+            setNotificationStatusRoute()
         }
     }
 }
