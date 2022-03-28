@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.reflect.jvm.jvmName
 
 
 class MessagingService {
@@ -58,6 +59,9 @@ class MessagingService {
                 val response = firebaseMessaging?.send(message)
                 println("send notification response = $response")
             } catch (e: Exception) {
+                println("e::class.simpleName = ${e::class.simpleName}")
+                println("e::class.qualifiedName = ${e::class.qualifiedName}")
+                println("e::class.jvmName = ${e::class.jvmName}")
                 println("send notification exception. e.message=${e.message}")
             }
         }
