@@ -56,8 +56,9 @@ class MessagingService {
                 println("fcmToken=$fcmToken")
                 val message = prepareMessage(order, fcmToken)
                 println("preparedMessage=$message")
-
-                val response = firebaseMessaging?.send(message)
+                firebaseMessaging?.sendAsync(message)
+                val response = firebaseMessaging?.sendAsync(message)
+//                firebaseMessaging?.send
                 println("send notification response = $response")
             } catch (e: FirebaseMessagingException) {
 //                MessagingErrorCode.
