@@ -136,9 +136,10 @@ class UsersRepo {
                             val list = mutableListOf<String>()
                             if(snapshot != null) {
                                 for(child in snapshot.children) {
-                                    list.add(child.getValue(String::class.java))
+                                    list.add(child.key)
                                 }
                             }
+                            println("admins, list=$list")
                             continuation.resume(list)
                         }
 
