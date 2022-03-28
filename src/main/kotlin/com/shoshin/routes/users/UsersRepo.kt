@@ -132,6 +132,7 @@ class UsersRepo {
                     .child("admin")
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot?) {
+                            println("getAdminIds, snapshot=$snapshot")
                             val list = mutableListOf<String>()
                             if(snapshot != null) {
                                 for(child in snapshot.children) {
