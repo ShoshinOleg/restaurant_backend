@@ -43,6 +43,7 @@ class MessagingService {
         }
 
         private suspend fun sendNotificationToAdmin(order: Order, adminId: String) {
+            println("sendNotificationToAdmin")
             val tokensRes = UsersRepo.getFcmTokens(adminId)
             println("tokensRes=$tokensRes")
             for(token in tokensRes) {
