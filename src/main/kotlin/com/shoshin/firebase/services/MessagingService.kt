@@ -44,6 +44,7 @@ class MessagingService {
 
         private suspend fun sendNotificationToAdmin(order: Order, adminId: String) {
             val tokensRes = UsersRepo.getFcmTokens(adminId)
+            println("tokensRes=$tokensRes")
             for(token in tokensRes) {
                 sendNotificationToToken(order, token)
             }
@@ -52,6 +53,7 @@ class MessagingService {
         private fun sendNotificationToToken(order: Order, fcmToken: String) {
             try {
                 val message = prepareMessage(order, fcmToken)
+                println("preparedMessage=$message")
                 val response = firebaseMessaging?.send(message)
                 println("send notification response = $response")
             } catch (e: Exception) {
