@@ -21,7 +21,9 @@ fun Route.makeOrder() {
         } else {
             order.id = OrdersRepo.newId()
             OrdersRepo.updateOrder(order)
+            println("tut1")
             MessagingService.onNewOrder(order)
+            println("tut2")
             return@post call.ok(order.getOrderMetaData())
         }
     }
