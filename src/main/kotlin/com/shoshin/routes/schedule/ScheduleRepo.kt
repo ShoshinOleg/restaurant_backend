@@ -44,13 +44,10 @@ class ScheduleRepo {
                 REF_SCHEDULE.child("default")
                     .addListenerForSingleValueEvent(object: ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot?) {
-                            println("onDataChange")
-                            println("snapshot=$snapshot")
                             if(snapshot == null) {
                                 throw NotFoundException("Default schedule not found")
                             } else {
                                 var schedule = snapshot.getValue(WeekSchedule::class.java)
-                                println("schedule=$schedule")
                                 schedule = schedule ?: WeekSchedule()
                                 continuation.resume(schedule)
                             }

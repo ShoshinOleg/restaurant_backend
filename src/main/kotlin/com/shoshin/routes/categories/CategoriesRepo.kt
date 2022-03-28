@@ -18,7 +18,6 @@ class CategoriesRepo {
                     override fun onDataChange(snapshot: DataSnapshot?) {
                         val categories = mutableListOf<MenuCategory>()
                         if(snapshot != null) {
-                            println("snapshot = $snapshot")
                             for(child in snapshot.children) {
                                 categories.add(child.getValue(MenuCategory::class.java))
                             }

@@ -2,10 +2,7 @@ package com.shoshin.firebase.services
 
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
-import com.google.firebase.messaging.AndroidConfig
-import com.google.firebase.messaging.AndroidNotification
-import com.google.firebase.messaging.Message
-import com.google.firebase.messaging.Notification
+import com.google.firebase.messaging.*
 import com.shoshin.common.Reaction
 import com.shoshin.common.exceptions.InternalServerError
 import com.shoshin.firebase.firebaseMessaging
@@ -58,11 +55,14 @@ class MessagingService {
                 println("preparedMessage=$message")
                 val response = firebaseMessaging?.send(message)
                 println("send notification response = $response")
-            } catch (e: Exception) {
+            } catch (e: FirebaseMessagingException) {
                 println("e::class.simpleName = ${e::class.simpleName}")
                 println("e::class.qualifiedName = ${e::class.qualifiedName}")
                 println("e::class.jvmName = ${e::class.jvmName}")
                 println("send notification exception. e.message=${e.message}")
+                println("e=${e}")
+                println("e.messagingErrorCode=${e.messagingErrorCode}")
+                println("e.message=${e.message}")
             }
         }
 
