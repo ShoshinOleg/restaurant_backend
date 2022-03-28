@@ -6,6 +6,7 @@ import com.shoshin.common.default_responses.ok
 import com.shoshin.common.exceptions.ForbiddenError
 import com.shoshin.firebase.FirebasePrincipal
 import com.shoshin.firebase.services.MessagingService
+import com.shoshin.firebase.testService
 import com.shoshin.models.orders.Order
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -22,7 +23,9 @@ fun Route.makeOrder() {
             order.id = OrdersRepo.newId()
             OrdersRepo.updateOrder(order)
             println("tut1")
-            MessagingService.onNewOrder(order)
+            val testObject = testService?.getTest()
+            println("test object=$testObject")
+//            MessagingService.onNewOrder(order)
             println("tut2")
             return@post call.ok(order.getOrderMetaData())
         }
