@@ -14,8 +14,11 @@ fun Route.setNotificationStatusRoute() {
         val fcmToken = call.receive<String>()
         val statusString = call.parameters["status"]
         val status = statusString == "true"
-
-        UsersRepo.setFcmTokenIsEnabled(principal, fcmToken, status)
+        if(status) {
+            UsersRepo.setFcmTokenIsEnabled(principal, fcmToken, status)
+        } else {
+            UsersRepo.removeFcmToken(principal.userId, fcmToken)
+        }
         call.ok()
     }
 }

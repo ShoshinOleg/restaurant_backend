@@ -108,22 +108,17 @@ class UsersRepo {
             }
         }
 
-        suspend fun removeFcmToken(userId: String, fcmToken: String) : Reaction<Unit> {
+        suspend fun removeFcmToken(userId: String, fcmToken: String) {
             return suspendCoroutine { continuation ->
                 REF_USERS
                     .child(userId)
                     .child("fcmTokens")
                     .child(fcmToken)
                     .removeValue { error, _ ->
-                        if(error != null ) {
-                            continuation.resume(
-                                Reaction.Error(error.toException())
-                            )
-                        } else {
-                            continuation.resume(
-                                Reaction.Success(Unit)
-                            )
-                        }
+                        if(error != null )
+                            throw error.toException()
+                        else
+                            continuation.resume(Unit)
                     }
             }
         }
@@ -149,7 +144,6 @@ class UsersRepo {
                             throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
                         }
                     })
-
             }
         }
 

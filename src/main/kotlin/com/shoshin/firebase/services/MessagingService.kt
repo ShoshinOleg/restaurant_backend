@@ -51,11 +51,17 @@ class MessagingService {
 
         private fun sendNotificationToToken(order: Order, fcmToken: String) {
             try {
+                println("sendNotificationToToken")
+                println("order=$order")
+                println("fcmToken=$fcmToken")
                 val message = prepareMessage(order, fcmToken)
                 println("preparedMessage=$message")
+
                 val response = firebaseMessaging?.send(message)
                 println("send notification response = $response")
             } catch (e: FirebaseMessagingException) {
+//                MessagingErrorCode.
+//                MessagingErrorCode.INVALID_ARGUMENT
                 println("e::class.simpleName = ${e::class.simpleName}")
                 println("e::class.qualifiedName = ${e::class.qualifiedName}")
                 println("e::class.jvmName = ${e::class.jvmName}")
@@ -63,6 +69,7 @@ class MessagingService {
                 println("e=${e}")
                 println("e.messagingErrorCode=${e.messagingErrorCode}")
                 println("e.message=${e.message}")
+                println("ordinal=${e.messagingErrorCode.ordinal}")
             }
         }
 
