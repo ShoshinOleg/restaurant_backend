@@ -58,7 +58,7 @@ class UsersRepo {
             }
         }
 
-        suspend fun getFcmTokens(userId: String) : Reaction<List<String>> {
+        suspend fun getFcmTokens(userId: String) : List<String> {
             return suspendCoroutine { continuation ->
                 REF_USERS
                     .child(userId)
@@ -72,25 +72,14 @@ class UsersRepo {
                                     tokens.add(token)
                                 }
                             }
-                            continuation.resume(Reaction.Success(tokens))
+                            continuation.resume(tokens)
                         }
 
                         override fun onCancelled(error: DatabaseError?) {
-                            continuation.resume(
-                                Reaction.Error(Throwable(error?.message, error?.toException()?.cause))
-                            )
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
                         }
-
                     })
             }
-        }
-
-        suspend fun enableFcmToken(principal: FirebasePrincipal, fcmToken: String) : Reaction<Unit> {
-            return setFcmTokenIsEnabled(principal, fcmToken, true)
-        }
-
-        suspend fun disableFcmToken(principal: FirebasePrincipal, fcmToken: String) : Reaction<Unit> {
-            return setFcmTokenIsEnabled(principal, fcmToken, false)
         }
 
         suspend fun setFcmTokenIsEnabled(
@@ -137,7 +126,7 @@ class UsersRepo {
             }
         }
 
-        suspend fun getAdminIds() : Reaction<List<String>>{
+        suspend fun getAdminIds() : List<String>{
             return suspendCoroutine { continuation ->
                 REF_ROLES
                     .child("admin")
@@ -149,13 +138,11 @@ class UsersRepo {
                                     list.add(child.getValue(String::class.java))
                                 }
                             }
-                            continuation.resume(Reaction.Success(list))
+                            continuation.resume(list)
                         }
 
                         override fun onCancelled(error: DatabaseError?) {
-                            continuation.resume(
-                                Reaction.Error(Throwable(error?.message, error?.toException()?.cause))
-                            )
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
                         }
                     })
 
@@ -221,5 +208,6 @@ class UsersRepo {
                     })
             }
         }
+
     }
 }

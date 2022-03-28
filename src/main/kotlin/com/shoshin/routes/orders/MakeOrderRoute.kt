@@ -5,6 +5,7 @@ import com.shoshin.common.default_responses.internalServerError
 import com.shoshin.common.default_responses.ok
 import com.shoshin.common.exceptions.ForbiddenError
 import com.shoshin.firebase.FirebasePrincipal
+import com.shoshin.firebase.services.MessagingService
 import com.shoshin.models.orders.Order
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -20,6 +21,7 @@ fun Route.makeOrder() {
         } else {
             order.id = OrdersRepo.newId()
             OrdersRepo.updateOrder(order)
+            MessagingService.onNewOrder(order)
             return@post call.ok(order.getOrderMetaData())
         }
     }
