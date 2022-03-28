@@ -1,6 +1,7 @@
 package com.shoshin.routes.users
 
 import com.shoshin.common.default_responses.internalServerError
+import com.shoshin.common.default_responses.ok
 import com.shoshin.firebase.FirebasePrincipal
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -11,11 +12,10 @@ fun Route.setNotificationStatusRoute() {
     post("setNotificationsStatus") {
         val principal = call.principal<FirebasePrincipal>() ?: return@post call.internalServerError()
         val fcmToken = call.receive<String>()
-        val status = call.parameters["status"]
+        val statusString = call.parameters["status"]
+        val status = statusString == "true"
 
-        println("fcmToken=$fcmToken")
-        println("status=$status")
-
-        //call.receive<RestaurantUser>()
+        UsersRepo.setFcmTokenIsEnabled(principal, fcmToken, status)
+        call.ok()
     }
 }

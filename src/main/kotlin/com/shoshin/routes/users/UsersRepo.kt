@@ -93,7 +93,7 @@ class UsersRepo {
             return setFcmTokenIsEnabled(principal, fcmToken, false)
         }
 
-        private suspend fun setFcmTokenIsEnabled(
+        suspend fun setFcmTokenIsEnabled(
             principal: FirebasePrincipal,
             fcmToken: String,
             isEnabled: Boolean
