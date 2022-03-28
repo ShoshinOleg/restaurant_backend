@@ -3,14 +3,11 @@ package com.shoshin.firebase.services
 import com.google.firebase.FirebaseApp
 import com.google.firebase.database.*
 import com.google.firebase.messaging.*
-import com.shoshin.common.Reaction
-import com.shoshin.common.exceptions.InternalServerError
-import com.shoshin.firebase.firebaseMessaging
 import com.shoshin.models.orders.Order
 import com.shoshin.routes.users.UsersRepo
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.jvm.jvmName
@@ -54,11 +51,29 @@ class MessagingService {
                 println("sendNotificationToToken")
                 println("order=$order")
                 println("fcmToken=$fcmToken")
-                val message = prepareMessage(order, fcmToken)
-                println("preparedMessage=$message")
-                firebaseMessaging?.sendAsync(message)
-                val response = firebaseMessaging?.sendAsync(message)
+                //val message = prepareMessage(order, fcmToken)
+                //println("preparedMessage=$message")
+//                firebaseMessaging?.sendAsync(message)
+                //val response = firebaseMessaging?.send(message)
+
 //                firebaseMessaging?.send
+
+                val message = Message.builder()
+                    .putData("score", "850")
+                    .putData("time", "2:45")
+                    .setToken(fcmToken)
+                    .build()
+
+// Send a message to the device corresponding to the provided
+// registration token.
+
+// Send a message to the device corresponding to the provided
+// registration token.
+                val response = FirebaseMessaging.getInstance(FirebaseApp.getInstance()).send(message)
+// Response is a message ID string.
+// Response is a message ID string.
+                println("Successfully sent message: $response")
+
                 println("send notification response = $response")
             } catch (e: FirebaseMessagingException) {
 //                MessagingErrorCode.
@@ -71,6 +86,9 @@ class MessagingService {
                 println("e.messagingErrorCode=${e.messagingErrorCode}")
                 println("e.message=${e.message}")
                 println("ordinal=${e.messagingErrorCode.ordinal}")
+
+                OkHttpClient.Builder()
+
             }
         }
 

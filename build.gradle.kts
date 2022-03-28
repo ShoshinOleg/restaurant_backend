@@ -32,6 +32,28 @@ dependencies {
     implementation("com.google.firebase:firebase-admin:8.1.0")
     implementation("com.google.gms:google-services:4.3.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC3")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
+
+    //    def retrofitVersion = "2.9.0"
+    //    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    //    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    //    implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofitVersion"
+    //
+    //
+    //    implementation 'com.google.dagger:dagger:2.40.5'
+    //    kapt 'com.google.dagger:dagger-compiler:2.40.5'
+    //
+    //
+    //    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
+    //    implementation("com.squareup.okhttp3:okhttp")
+    //    implementation("com.squareup.okhttp3:logging-interceptor")
 }
 
 tasks.create("stage") {
