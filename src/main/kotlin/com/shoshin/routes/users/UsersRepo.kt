@@ -68,8 +68,10 @@ class UsersRepo {
                             val tokens = mutableListOf<String>()
                             if(snapshot != null) {
                                 for(tokenSnap in snapshot.children) {
-                                    val token = tokenSnap.getValue(String::class.java)
-                                    tokens.add(token)
+                                    val token = tokenSnap.key
+                                    val tokenEnabled: Boolean = tokenSnap.getValue(Boolean::class.java)
+                                    if(tokenEnabled)
+                                        tokens.add(token)
                                 }
                             }
                             continuation.resume(tokens)
