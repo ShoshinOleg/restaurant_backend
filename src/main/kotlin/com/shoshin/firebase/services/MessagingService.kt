@@ -14,6 +14,8 @@ import com.shoshin.routes.users.UsersRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class MessagingService {
@@ -23,17 +25,24 @@ class MessagingService {
             .child("new")
 
         suspend fun onNewOrder(order: Order) {
-            val admins = UsersRepo.getAdminIds()
-            if(admins.isNotEmpty()) {
-                for(adminId in admins) {
-                    sendNotificationToAdmin(order, adminId)
+            return suspendCoroutine { continuation ->
+                CoroutineScope(continuation.context).launch {
+                    val admins = UsersRepo.getAdminIds()
+                    println("adminsIds=$admins")
+                    if(admins.isNotEmpty()) {
+                        for(adminId in admins) {
+                            println("adminId=$adminId")
+                            sendNotificationToAdmin(order, adminId)
+                        }
+                    } else {
+                        println("Don't created at least one admin account")
+                    }
+                    continuation.resume(Unit)
                 }
-            } else {
-                println("Don't created at least one admin account")
             }
         }
 
-        private suspend fun sendNotificationToAdmin(order: Order, adminId: String, ) {
+        private suspend fun sendNotificationToAdmin(order: Order, adminId: String) {
             val tokensRes = UsersRepo.getFcmTokens(adminId)
             for(token in tokensRes) {
                 sendNotificationToToken(order, token)
