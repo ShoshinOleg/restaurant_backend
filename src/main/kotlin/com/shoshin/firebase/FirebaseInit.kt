@@ -53,7 +53,7 @@ fun initFirebase() {
         .addInterceptor(loggingInterceptor)
         .build()
 
-    FCM_API_KEY = System.getenv("ADMIN_KEY")
+    FCM_API_KEY = System.getenv("FCM_KEY")
 
     //https://catfact.ninja/fact
 
