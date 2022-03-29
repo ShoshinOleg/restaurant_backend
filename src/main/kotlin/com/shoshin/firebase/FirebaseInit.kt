@@ -8,6 +8,8 @@ import com.google.firebase.cloud.StorageClient
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.shoshin.firebase.http_client.TestService
+import com.shoshin.firebase.http_client.fcm.FcmConstants
+import com.shoshin.firebase.http_client.fcm.FcmService
 import com.shoshin.firebase.services.MessagingService
 import io.ktor.client.*
 import okhttp3.OkHttpClient
@@ -24,8 +26,8 @@ var messagingService: MessagingService? = null
 var firebaseDatabase: FirebaseDatabase? = null
 var httpClient: OkHttpClient? = null
 var retrofit: Retrofit? = null
-var testService: TestService? = null
-
+var fcmService: FcmService? = null
+var FCM_API_KEY: String? = null
 
 fun initFirebase() {
     val serviceAccount = getEnvServiceAccount() ?: getLocalServiceAccount()
@@ -51,31 +53,16 @@ fun initFirebase() {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    FCM_API_KEY = System.getenv("ADMIN_KEY")
+
     //https://catfact.ninja/fact
 
     retrofit = Retrofit.Builder()
-        .baseUrl("https://catfact.ninja/")
+        .baseUrl(FcmConstants.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(httpClient!!)
         .build()
-    testService = retrofit?.create(TestService::class.java)
-
-    //            val loggingInterceptor = HttpLoggingInterceptor()
-    //            loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
-    //
-    //            val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-    //                .connectTimeout(30, TimeUnit.SECONDS)
-    //                .writeTimeout(30, TimeUnit.SECONDS)
-    //                .readTimeout(30, TimeUnit.SECONDS)
-    //                .addInterceptor(loggingInterceptor)
-    //                .addInterceptor(AuthOkHttpInterceptor(userTokenRepository))
-    //                .build()
-    //            val retrofit = Retrofit.Builder()
-    //                .baseUrl(Constants.BASE_URL)
-    //                .addConverterFactory(GsonConverterFactory.create())
-    //                .client(okHttpClient)
-    //                .build()
-    //            return retrofit.create(RestaurantService::class.java)
+    fcmService = retrofit?.create(FcmService::class.java)
 }
 
 private fun getEnvServiceAccount() = System.getenv("ADMIN_KEY")?.let { ByteArrayInputStream(it.toByteArray()) }
