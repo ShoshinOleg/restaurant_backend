@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FcmMessage(
     val to: String,
-    val fcmNotification: FcmNotification? = null
+    val notification: FcmNotification? = null
 )
