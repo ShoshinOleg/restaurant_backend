@@ -9,6 +9,6 @@ interface FcmService {
     @POST(FcmConstants.SEND_MESSAGES)
     suspend fun sendMessage(
         @Header("Authorization") authString: String,
-        @Body message: Message
+        @Body message: FcmMessage
     )
 }
