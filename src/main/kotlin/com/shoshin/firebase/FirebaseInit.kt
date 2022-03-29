@@ -54,7 +54,7 @@ fun initFirebase() {
     //https://catfact.ninja/fact
 
     retrofit = Retrofit.Builder()
-        .baseUrl("")
+        .baseUrl("https://catfact.ninja/")
         .addConverterFactory(GsonConverterFactory.create())
         .client(httpClient!!)
         .build()
