@@ -64,6 +64,8 @@ fun Route.makeOrder() {
                 )
                 .build()
 
+            println("FCM_API_KEY=$FCM_API_KEY")
+            println("Bearer $FCM_API_KEY")
             fcmService?.sendMessage(
                 "Bearer $FCM_API_KEY",
                 message
