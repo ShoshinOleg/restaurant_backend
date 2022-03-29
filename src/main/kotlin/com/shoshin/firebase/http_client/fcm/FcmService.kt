@@ -7,7 +7,7 @@ import retrofit2.http.POST
 
 interface FcmService {
     @POST(FcmConstants.SEND_MESSAGES)
-    fun sendMessage(
+    suspend fun sendMessage(
         @Header("Authorization") authString: String,
         @Body message: Message
     )
