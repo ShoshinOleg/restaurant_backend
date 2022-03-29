@@ -51,18 +51,18 @@ class MessagingService {
                 println("sendNotificationToToken")
                 println("order=$order")
                 println("fcmToken=$fcmToken")
-                //val message = prepareMessage(order, fcmToken)
+                val message: Message = prepareMessage(order, fcmToken)
                 //println("preparedMessage=$message")
 //                firebaseMessaging?.sendAsync(message)
                 //val response = firebaseMessaging?.send(message)
 
 //                firebaseMessaging?.send
 
-                val message = Message.builder()
-                    .putData("score", "850")
-                    .putData("time", "2:45")
-                    .setToken(fcmToken)
-                    .build()
+//                val message = Message.builder()
+//                    .putData("score", "850")
+//                    .putData("time", "2:45")
+//                    .setToken(fcmToken)
+//                    .build()
 
 // Send a message to the device corresponding to the provided
 // registration token.
