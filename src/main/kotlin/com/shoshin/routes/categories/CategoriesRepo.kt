@@ -53,7 +53,7 @@ class CategoriesRepo {
             return suspendCoroutine { continuation ->
                 REF_CATEGORIES
                     .child(categoryId)
-                    .child("imageURL")
+                    .child("imageUrl")
                     .setValue(imageUrl) { error, _ ->
                         if(error != null )
                             throw error.toException()

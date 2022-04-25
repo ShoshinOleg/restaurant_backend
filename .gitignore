@@ -1,3 +1,4 @@
 # Project exclude paths
 /.gradle/
 *restaurant-firebase-adminsdk.json
+*fcm-api-token

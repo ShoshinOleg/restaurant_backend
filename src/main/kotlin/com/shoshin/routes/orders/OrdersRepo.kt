@@ -63,71 +63,43 @@ class OrdersRepo {
                 }
             }
         }
+
+        suspend fun getOrdersByDateAndStatus(date: String, status: String): List<Order> {
+            return suspendCoroutine { continuation ->
+                REF_ORDERS
+                    .child(date)
+                    .child(status)
+                    .addListenerForSingleValueEvent(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot?) {
+                            val orders = mutableListOf<Order>()
+                            if(snapshot != null) {
+                                for(child in snapshot.children) {
+                                    orders.add(child.getValue(Order::class.java))
+                                }
+                            }
+                            continuation.resume(orders)
+                        }
+
+                        override fun onCancelled(error: DatabaseError?) {
+                            throw error?.toException() ?: Throwable(error?.message, error?.toException()?.cause)
+                        }
+                    })
+            }
+        }
+
+        suspend fun getOrderByUserIdAndOrderId(userId: String, orderId: String): Order {
+            return suspendCoroutine { continuation ->
+                CoroutineScope(continuation.context + Dispatchers.IO).launch {
+                    val metadata = UsersRepo.getOrderMetadata(userId, orderId)
+                    if(metadata.customerId != null && metadata.id != null) {
+                        val order = getOrder(metadata.customerId!!, metadata.id!!)
+                        continuation.resume(order)
+                    } else {
+                        throw NotFoundException()
+                    }
+                }
+
+            }
+        }
     }
 }
-
-//        suspend fun updateDefaultSchedule(weekSchedule: WeekSchedule) : Boolean {
-//            return suspendCoroutine { continuation ->
-//                REF_SCHEDULE.child("default")
-//                    .setValue(weekSchedule) { error, _ ->
-//                        if(error != null )
-//                            throw error.toException()
-//                        else
-//                            continuation.resume(true)
-//                    }
-//            }
-//        }
-
-//class OrderRepo {
-//    companion object {
-//        val REF_ORDERS =
-//            Firebase.database.reference
-//                .child("order")
-//
-//        fun newId() = REF_ORDERS.push().key.toString()
-//
-//        fun updateOrder(order: Order, callback: () -> Unit) {
-//            REF_ORDERS
-//                .child(order.orderDate!!)
-//                .child(order.status!!)
-//                .child(order.id!!)
-//                .setValue(order)
-//                .addOnSuccessListener {
-//                    UserRepo.setOrder(order) {
-//                        callback()
-//                    }
-//                }
-//        }
-//
-//        fun getOrder(orderMetadata: OrderMetadata, callback: (order: Order) -> Unit) {
-////            val executingState = if (orderMetadata.isExecuted) "executed" else "unexecuted"
-//            REF_ORDERS
-//                .child(orderMetadata.date!!)
-//                .child(orderMetadata.status!!)
-//                .child(orderMetadata.id!!)
-//                .addListenerForSingleValueEvent(object: ValueEventListener{
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        val order = snapshot.getValue(Order::class.java)
-//                        callback(order!!)
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {}
-//                })
-//
-//        }
-//
-//
-//
-////        fun getOrders(callback: (MutableList<Order>) -> Unit) {
-////            REF_ORDERS
-////                .addListenerForSingleValueEvent(object: ValueEventListener{
-////                    override fun onDataChange(snapshot: DataSnapshot) {
-////                        val dict = snapshot.getValue(Dictionary<String, Order>::class.java)
-////                    }
-////
-////                    override fun onCancelled(error: DatabaseError) {}
-////
-////                })
-////        }
-//    }
-//}

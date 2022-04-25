@@ -1,4 +1,4 @@
-package com.shoshin.routes.orders
+package com.shoshin.routes.orders.user
 
 import com.shoshin.common.default_responses.internalServerError
 import com.shoshin.common.default_responses.ok

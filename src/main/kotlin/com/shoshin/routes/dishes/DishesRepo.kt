@@ -85,9 +85,9 @@ class DishesRepo {
 
         suspend fun setDishImage(dishId: String, url: String): Boolean {
             return suspendCoroutine { continuation ->
-                DishesRepo.REF_DISHES
+                REF_DISHES
                     .child(dishId)
-                    .child("imageURL")
+                    .child("imageUrl ")
                     .setValue(url) { error, _ ->
                         if(error != null )
                             throw error.toException()
